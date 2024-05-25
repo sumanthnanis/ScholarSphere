@@ -1,4 +1,3 @@
-// Home.js
 import React, { useEffect, useState, useContext } from "react";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
@@ -16,6 +15,7 @@ import {
   fetchProfiles,
   handleCiteThisPaper,
 } from "../../utils/util";
+import { FaStar } from "react-icons/fa";
 
 const Home = () => {
   const { bookmarkedPapers, setBookmarkedPapers } =
@@ -35,16 +35,7 @@ const Home = () => {
   const [copySuccess, setCopySuccess] = useState(false);
 
   useEffect(() => {
-    const fetchProfileData = async () => {
-      try {
-        const profileData = await fetchProfiles();
-        setProfiles(profileData);
-      } catch (error) {
-        console.error("Error fetching profiles:", error);
-      }
-    };
-
-    fetchProfileData();
+    fetchProfilesWithRatings();
   }, []);
 
   useEffect(() => {
@@ -53,7 +44,6 @@ const Home = () => {
 
   const fetchPapers = async (profilesData = profiles) => {
     try {
-      console.log("dgdgddh");
       let url = "http://localhost:8000/api/get-papers";
       const params = new URLSearchParams();
 
@@ -74,17 +64,14 @@ const Home = () => {
       }
       const response = await axios.get(url);
       const papersData = response.data;
-      console.log(papersData);
 
       const userProfile = profilesData.find(
         (profile) => profile.username === data.username
       );
-      console.log("profile", userProfile);
       const userSkillsString = userProfile
         ? userProfile.skills.toLowerCase()
         : "";
       const userSkills = userSkillsString ? userSkillsString.split(",") : [];
-      console.log("hiiiiiiiiiiiiiii", userSkills);
 
       const matchedPapers = papersData.filter((paper) => {
         const paperCategories = paper.categories.map((category) =>
@@ -115,7 +102,7 @@ const Home = () => {
       try {
         if (searchQuery === "") {
           await fetchPapers();
-          await fetchProfiles(setProfiles, setUserProfile, fetchPapers);
+          await fetchProfilesWithRatings();
         } else {
           const response = await axios.get(
             `http://localhost:8000/api/search?search=${searchQuery}`
@@ -123,7 +110,6 @@ const Home = () => {
           const { papers, profiles } = response.data;
           setPapers(papers);
           setProfiles(profiles);
-          console.log(profiles);
           setBookmarkedPapers(
             papers.filter((paper) => paper.bookmarkedBy.includes(data.username))
           );
@@ -165,6 +151,7 @@ const Home = () => {
           totalReads,
           profileImage: profile.profileImage,
           institution: profile.institution,
+          averageRating: profile.averageRating || 0,
         };
       } else {
         return null;
@@ -172,18 +159,48 @@ const Home = () => {
     })
     .filter((profile) => profile !== null);
 
-  console.log("Aggregated Profiles:", aggregatedProfiles);
-
   useEffect(() => {
     localStorage.setItem("role", role);
-    console.log(role);
   }, [role]);
 
+  // Sort the profiles by averageRating in descending order
+  const sortedProfiles = [...aggregatedProfiles].sort(
+    (a, b) => b.averageRating - a.averageRating
+  );
+
   const filteredProfiles = searchQuery
-    ? aggregatedProfiles.filter((profile) =>
+    ? sortedProfiles.filter((profile) =>
         profile.username.toLowerCase().includes(searchQuery.toLowerCase())
       )
-    : aggregatedProfiles;
+    : sortedProfiles;
+
+  const renderStars = (rating) => {
+    return [1, 2, 3, 4, 5].map((star) => (
+      <FaStar
+        key={star}
+        className={styles.star}
+        color={star <= rating ? "gold" : "grey"}
+      />
+    ));
+  };
+
+  const fetchProfilesWithRatings = async () => {
+    try {
+      const profileData = await fetchProfiles();
+      const profilesWithRatings = await Promise.all(
+        profileData.map(async (profile) => {
+          const response = await axios.get(
+            `http://localhost:8000/api/get-author-ratings/${profile.username}`
+          );
+          const { averageRating } = response.data;
+          return { ...profile, averageRating: averageRating || 0 };
+        })
+      );
+      setProfiles(profilesWithRatings);
+    } catch (error) {
+      console.error("Error fetching profiles with ratings:", error);
+    }
+  };
 
   return (
     <>
@@ -223,21 +240,18 @@ const Home = () => {
               toggleBookmark={(index, id) =>
                 toggleBookmark(
                   index,
-
                   id,
                   papers,
                   bookmarkedPapers,
                   setPapers,
                   setBookmarkedPapers,
-                  data.username,
-                  setPapers
+                  data.username
                 )
               }
               showPdf={showPdf}
               handleCitePopup={(paper) =>
                 handleCitePopup(paper, setSelectedPaper, setShowPopup)
               }
-              setPapers={setPapers}
             />
           </div>
           <div className={styles.total}>
@@ -271,7 +285,13 @@ const Home = () => {
                     </div>
                     <div className={styles.detailsOverlay}>
                       <div className={styles.userInfo}>
-                        <h4 className={styles.userName}>{profile.username}</h4>
+                        <h4 className={styles.userName}>
+                          {profile.username}{" "}
+                          <span className={styles.statLabel}>
+                            ({profile.averageRating})
+                          </span>
+                        </h4>
+
                         <p className={styles.userInstitution}>
                           {profile.institution}
                         </p>
@@ -297,6 +317,8 @@ const Home = () => {
                           </span>
                           <span className={styles.statLabel}>Reads</span>
                         </div>
+                        <div className={styles.statDivider}></div>
+                        <div className={styles.statItem}></div>
                       </div>
                     </div>
                   </div>

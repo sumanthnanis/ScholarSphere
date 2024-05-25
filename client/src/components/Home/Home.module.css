@@ -358,7 +358,7 @@
 }
 
 .statItem {
-  margin-right: 16px;
+  margin-right: 25px;
   display: flex;
   flex-direction: column;
 }
@@ -439,4 +439,10 @@
 
 .averageRating {
   margin-left: 5px;
+}
+
+.starsHome{
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 3px;
 }

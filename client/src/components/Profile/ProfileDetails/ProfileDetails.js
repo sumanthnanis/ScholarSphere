@@ -1,11 +1,10 @@
-
-import styles from "./ProfileDetails.module.css";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { FaStar } from "react-icons/fa";
+import styles from "./ProfileDetails.module.css";
 import { useDispatch, useSelector } from "react-redux";
 
 const ProfileDetails = ({ authorname }) => {
- 
   const [profileData, setProfileData] = useState(null);
   const [paperStats, setPaperStats] = useState({
     totalPapers: 0,
@@ -13,8 +12,12 @@ const ProfileDetails = ({ authorname }) => {
     totalReads: 0,
     categories: [],
   });
+  const [authorRatings, setAuthorRatings] = useState({
+    averageRating: 0,
+    userRating: 0,
+  });
   const dispatch = useDispatch();
-  const data = useSelector((prev) => prev.auth.user);
+  const data = useSelector((state) => state.auth.user);
 
   const fetchProfileData = async () => {
     const fetchUsername = authorname || data.username;
@@ -31,6 +34,47 @@ const ProfileDetails = ({ authorname }) => {
     } catch (error) {
       console.error("Error fetching profile data:", error);
     }
+  };
+
+  const fetchAuthorRatings = async (authorName) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/get-author-ratings/${authorName}?username=${data.username}`
+      );
+      const { averageRating, userRating } = response.data;
+      setAuthorRatings({ averageRating, userRating });
+    } catch (error) {
+      console.error("Error fetching author ratings:", error);
+    }
+  };
+
+  const handleAuthorRatingChange = async (rating) => {
+    try {
+      const response = await axios.post("http://localhost:8000/api/rate-author", {
+        authorName: authorname,
+        username: data.username,
+        rating,
+      });
+
+      if (response.status === 200) {
+        await fetchAuthorRatings(authorname);
+      } else {
+        console.error("Error submitting rating:", response.status);
+      }
+    } catch (error) {
+      console.error("Error submitting rating:", error);
+    }
+  };
+
+  const renderStars = (ratingToDisplay, isAverage = false) => {
+    return [1, 2, 3, 4, 5].map((star) => (
+      <FaStar
+        key={star}
+        className={styles.star}
+        color={star <= ratingToDisplay ? (isAverage ? "gold" : "violet") : "grey"}
+        onClick={() => !isAverage && handleAuthorRatingChange(star)}
+      />
+    ));
   };
 
   useEffect(() => {
@@ -78,6 +122,7 @@ const ProfileDetails = ({ authorname }) => {
     if (fetchUsername) {
       fetchProfileData();
       fetchPapersByAuthor();
+      fetchAuthorRatings(fetchUsername);
     }
   }, []);
 
@@ -117,6 +162,23 @@ const ProfileDetails = ({ authorname }) => {
             <p> Reads: {paperStats.totalReads}</p>
           </div>
         )}
+
+        <div className={styles.authorRating}>
+          {/* <h3>Average Rating of the author: {authorRatings.averageRating.toFixed(1)}</h3>
+          <div className={styles.stars}>
+            {renderStars(authorRatings.averageRating, true)}
+          </div> */}
+
+          <h4>Rating:&nbsp;</h4>
+          <div className={styles.stars}>
+            {renderStars(authorRatings.userRating)}
+            <span>
+              (
+                {authorRatings.averageRating.toFixed(1)}
+              )
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   );

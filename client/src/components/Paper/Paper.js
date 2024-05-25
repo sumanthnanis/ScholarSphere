@@ -223,7 +223,7 @@ const PaperList = ({
                   </span>
                 </div>
               </div>
-              <div className={styles.authorrate}>
+              <div className={styles.rateauthor}>
                 <NavLink to={`/user/${encodeURIComponent(data.uploadedBy)}`}>
                   Rate this author?
                 </NavLink>
