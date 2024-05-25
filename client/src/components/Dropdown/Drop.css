@@ -1,0 +1,84 @@
+.dropdownn {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdownn-toggle {
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}
+
+.dropdownn-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  display: block;
+  float: left;
+  min-width: 160px;
+  padding: 5px 0;
+  margin: 5px 110px 0;
+  font-size: 14px;
+  text-align: left;
+  list-style: none;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+}
+
+.dropdownn-menu .dropdownn-item {
+  display: block;
+  width: 100%;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: 400;
+  color: #333;
+  text-align: inherit;
+  white-space: nowrap;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.dropdownn-menu .dropdownn-item:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdownnName {
+  text-decoration: underline;
+  color: gray;
+  margin-left: 10px;
+}
+
+.card {
+  border: 1px solid #333;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.dropdownn-btn {
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}
+
+@media (max-width: 470px) {
+  .dropdownn-btn {
+    padding: 10px;
+    font-size: 12px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    width: 280px;
+  }
+}

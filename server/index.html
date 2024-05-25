@@ -1,0 +1,29 @@
+hello // const showPdf = async (pdf) => { // // window.location.href =
+`http://localhost:8000/files/${pdf}`; // console.log(pdf); // try { // const
+response = await axios.get( //
+`http://localhost:8000/api/download?id=${paper._id}` // ); //
+console.log(response); // } catch (error) { // console.error("Error fetching
+papers:", error); // } // //
+setPdfFile(`http://localhost:8000//api/download/${pdf}`); // }; const showPdf =
+async (paper) => { if (!paper || !paper.pdf) { console.error("Invalid paper
+object:", paper); return; } try { const response = await axios.get(
+`http://localhost:8000/api/download?id=${paper._id}`, { responseType: "blob", }
+); const pdfBlob = new Blob([response.data], { type: "application/pdf" }); const
+url = window.URL.createObjectURL(pdfBlob); window.open(url);
+window.URL.revokeObjectURL(url); } catch (error) { console.error("Error fetching
+papers:", error); } }; app.get("/api/download", async (req, res) => { try {
+const paperId = req.query.id; const paper = await Paper.findById(paperId); if
+(!paper) { return res.status(404).send("Paper not found"); } const filePath =
+path.join(__dirname, "files", paper.pdf.filename); res.download(filePath,
+paper.pdf.originalname); } catch (error) { console.error(error);
+res.status(500).send("Internal Server Error"); } }); // import React from
+"react"; // import "./Dropdown.css"; // function Dropdown({ items }) { // const
+renderMenu = (items) => { // return ( //
+<ul className="dropdown-menu">
+  // {items.map((item, index) => ( //
+  <li key="{index}" className="{item.cName}">
+    // {item.title} // {item.subMenu && renderMenu(item.subMenu)}{" "} //
+  </li>
+  // ))} //
+</ul>
+// ); // }; // return renderMenu(items); // } // export default Dropdown;

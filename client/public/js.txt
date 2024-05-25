@@ -1,0 +1,291 @@
+import fetch from 'node-fetch';
+import WebSocket from 'ws';
+import readline from 'readline';
+
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+async function getUserInput(question) {
+    return new Promise((resolve, reject) => {
+        rl.question(question, (answer) => {
+            resolve(answer);
+        });
+    });
+}
+const ClientDetails = {
+    "Username": null,
+    "Salt": null,
+    "G": null,
+    "K": null,
+    "N": null,
+    "V": null
+};
+
+const ClientTempDetails = {
+    "A": null,
+    "B": null,
+    "a": null,
+    "u": null,
+    "K_client": null
+};
+
+const U_generation = {
+    "A": null,
+    "B": null
+};
+
+const priv_vars = {
+    "a": null,
+    "u": null
+};
+
+function isInt(s) {
+    return !isNaN(s) && Number.isInteger(parseFloat(s));
+}
+
+function callComputeAApi(base_url, data) {
+    return fetch(base_url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json().then(data => {
+                const decodedMessage = Buffer.from(data.message, 'base64').toString('utf-8');
+                return JSON.parse(decodedMessage);
+            });
+        } else if (response.status === 409) {
+            console.log('Signup Failure:', response);
+            return Promise.reject({error: 'Signup Failure'});
+        } else {
+            console.error('Error:', response.status);
+            console.error(response.statusText);
+            return Promise.reject({error: `Error: ${response.status}`});
+        }
+    })
+    .catch(error => {
+        console.error('Request error:', error);
+        return Promise.reject({error: `Request error: ${error}`});
+    });
+}
+
+async function login101(uri, data) {
+    const ws = new WebSocket(uri);
+
+    ws.on('open', () => {
+        const request101 = JSON.stringify({status: 101, message: data});
+        ws.send(request101);
+    });
+
+    return new Promise((resolve, reject) => {
+        ws.on('message', message => {
+            const outerDict = JSON.parse(message);
+            const innerDict = JSON.parse(outerDict.message);
+            const jsonData = JSON.parse(innerDict.message);
+            resolve([innerDict, jsonData]);
+        });
+        ws.on('error', error => reject(error));
+    });
+}
+
+async function login201(uri, data) {
+    const ws = new WebSocket(uri);
+
+    ws.on('open', () => {
+        const request201 = JSON.stringify({status: 201, message: data});
+        ws.send(request201);
+    });
+
+    return new Promise((resolve, reject) => {
+        ws.on('message', message => {
+            const response201 = JSON.parse(message);
+            resolve(response201.message);
+        });
+        ws.on('error', error => reject(error));
+    });
+}
+
+async function login301(uri) {
+    const ws = new WebSocket(uri);
+
+    ws.on('open', () => {
+        const request301 = JSON.stringify({status: 301, message: "Hello, server!"});
+        ws.send(request301);
+    });
+
+    return new Promise((resolve, reject) => {
+        ws.on('message', message => {
+            const response301 = JSON.parse(message);
+            resolve(response301.message);
+        });
+        ws.on('error', error => reject(error));
+    });
+}
+
+async function login401(uri, data) {
+    const ws = new WebSocket(uri);
+
+    ws.on('open', () => {
+        const request401 = JSON.stringify({status: 401, message: data});
+        ws.send(request401);
+    });
+
+    return new Promise((resolve, reject) => {
+        ws.on('message', message => {
+            const response401 = JSON.parse(message);
+            resolve(response401.message);
+        });
+        ws.on('error', error => reject(error));
+    });
+}
+
+async function login501(uri, data) {
+    const ws = new WebSocket(uri);
+
+    ws.on('open', () => {
+        const request501 = JSON.stringify({status: 501, message: data});
+        ws.send(request501);
+    });
+
+    return new Promise((resolve, reject) => {
+        ws.on('message', message => {
+            const response501 = JSON.parse(message);
+            resolve(response501.message);
+        });
+        ws.on('error', error => reject(error));
+    });
+}
+
+async function main() {
+    const uri = "ws://localhost:2002/ws";
+    const Endpoint = "http://localhost:2004/";
+
+    // Step 1: Handle 101
+    const name =  await getUserInput("Enter your name:");
+    const passwordInput =  await getUserInput("Enter your password:");
+    const password = isInt(passwordInput) ? parseInt(passwordInput) : passwordInput;
+
+    const [innerDict, jsonDict] = await login101(uri, name);
+    for (const key in jsonDict) {
+        if (key in ClientDetails) {
+            ClientDetails[key] = jsonDict[key];
+        }
+    }
+    ClientTempDetails['B'] = innerDict.metadata;
+
+    const valueAA = await callComputeAApi(`${Endpoint}computeA`, jsonDict);
+    ClientTempDetails['A'] = valueAA.A;
+    ClientTempDetails['a'] = valueAA.a;
+    console.log("A: ---> ", ClientTempDetails['A'], "B: ---> ", ClientTempDetails['B'], "a: ---> ", ClientTempDetails['a']);
+    console.log("Completion of 101");
+
+    // Step 2: Handle 201
+    const computationResult = await login201(uri, String(ClientTempDetails["A"]));
+    if (computationResult) {
+        U_generation["A"] = ClientTempDetails["A"];
+        U_generation["B"] = ClientTempDetails["B"];
+        const valueU = await callComputeAApi(`${Endpoint}computeU`, U_generation);
+        ClientTempDetails["u"] = valueU;
+        console.log("u: ---> ", ClientTempDetails["u"]);
+    }
+    console.log("Completion of 201");
+
+    // Step 3: Handle 301
+    const computationResult301 = await login301(uri);
+    const data = {
+        'user': ClientDetails,
+        'user_tempdetails': ClientTempDetails,
+        'priv_vars': {
+            'a': ClientTempDetails['a'],
+            'u': ClientTempDetails['u']
+        },
+        'U_generation': {
+            'A': ClientTempDetails['A'],
+        }
+    };
+    if (computationResult301) {
+        const K_client = await callComputeAApi(`${Endpoint}computeA/compute-K_client?password=${password}`, data);
+        ClientTempDetails["K_client"] = K_client;
+        console.log("K ---> ", ClientTempDetails["K_client"]);
+    }
+    console.log("Completion of 301");
+
+    // Step 4: Handle 401
+    const M_1 = await callComputeAApi(`${Endpoint}computeA/compute-K_client/computeM1`, data);
+    console.log("M1: ---> ", M_1);
+    const computationResult401 = await login401(uri, M_1);
+    console.log(computationResult401);
+
+    // Step 5: Final step
+    const M = await callComputeAApi(`${Endpoint}computeA/compute-K_client/computeM?M_1=${M_1}`, data);
+    console.log("M: ---> ", M);
+    const computationResult501 = await login501(uri, String(M));
+    console.log(computationResult501);
+}
+
+async function register() {
+    const Endpoint = "http://localhost:2004/";
+
+    const name = await getUserInput("Enter your name:");
+    const passwordInput =  await getUserInput("Enter your password:");
+    const password = isInt(passwordInput) ? parseInt(passwordInput) : passwordInput;
+
+    const url = `${Endpoint}signup`;
+    const data = {"username": name, "password": password};
+    const headers = {"Content-Type": "application/json"};
+
+    const signupResponse = await fetch(url, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(data)
+    });
+    const responseContent = await signupResponse.json();
+    const parsedResponse = JSON.parse(responseContent.message);
+
+    for (const key in parsedResponse) {
+        ClientDetails[key] = parsedResponse[key];
+    }
+    console.log(ClientDetails);
+
+    const uploadUrl = `${Endpoint}upload`;
+    const uploadResponse = await fetch(uploadUrl, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(ClientDetails)
+    });
+
+    if (uploadResponse.ok) {
+        console.log("Signup Success");
+    } else if (uploadResponse.status === 409) {
+        console.log("Signup Failure");
+    } else {
+        console.log("Unexpected response:", uploadResponse.status);
+        console.log(uploadResponse.statusText);
+    }
+}
+
+// Start the program
+// const value = prompt("1. Register\n2. Login\n3. Exit\n");
+// if (value === '2') {
+//     main().catch(error => console.error(error));
+// } else if (value === '1') {
+//     register().catch(error => console.error(error));
+// } else {
+//     console.log("Exiting...");
+// }
+(async () => {
+    const value = await getUserInput("1. Register\n2. Login\n3. Exit\n");
+    if (value === '2') {
+        main().catch(error => console.error(error));
+    } else if (value === '1') {
+        register().catch(error => console.error(error));
+    } else {
+        console.log("Exiting...");
+        process.exit(0);
+    }
+})();

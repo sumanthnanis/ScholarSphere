@@ -1,0 +1,42 @@
+/* UserFiles.module.css */
+.list {
+  display: flex;
+  flex-direction: column;
+  /* height: 60vh; */
+}
+.filesHeading {
+  /* color: #fffacd; */
+  font-size: larger;
+  margin-bottom: 10px;
+}
+.paper {
+  border: 1px solid;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  padding: 10px;
+  position: relative;
+}
+.bookmarked {
+  border-color: #ffd700; /* Gold color for bookmarked items */
+  background-color: #fffacd; /* Light yellow background */
+}
+.button {
+  display: flex;
+  flex-direction: column;
+}
+.btnBookmark.bookmarked {
+  color: #ffd700; /* Gold color for bookmarked button */
+}
+
+.profileView .listBody {
+  height: 60vh; /* Set height to 60vh when in profile view */
+}
+
+.listBody {
+  flex-grow: 1; /* Ensure the card body takes the remaining width */
+  padding: 16px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow-y: auto;
+}

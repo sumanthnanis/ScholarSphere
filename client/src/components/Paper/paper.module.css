@@ -1,0 +1,225 @@
+/* PaperList.module.css */
+.outputDiv {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.innerDiv {
+  background-color: #fff;
+  padding: 20px;
+  width: 70%;
+  margin-left: 25px;
+  margin-bottom: 11px;
+  margin-top: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navlink {
+  text-decoration: none;
+  color: #258eb2;
+}
+
+.navlink:hover {
+  text-decoration: underline;
+}
+
+.navlnk {
+  text-decoration: none;
+  color: black;
+}
+
+.details {
+  display: flex;
+  justify-content: start;
+}
+
+.truncatedTitle {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  font-family: sans-serif;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.h5 {
+  margin-top: 13px;
+  margin-bottom: 5px;
+  margin-right: 5px;
+  font-size: 14px;
+  font-family: sans-serif;
+  font-style: normal;
+  font-weight: 100;
+  padding: 3px;
+  color: #666;
+}
+
+#h5 {
+  background-color: rgb(200, 255, 200);
+  font-family: sans-serif;
+  font-style: normal;
+  font-weight: 100;
+  padding: 3px;
+  color: black;
+}
+
+.uploadedBy {
+  font-family: sans-serif;
+  font-style: normal;
+  font-size: 17px;
+  font-weight: 400;
+}
+
+.papertype {
+  font-family: sans-serif;
+  font-style: normal;
+  font-weight: 100;
+  color: rgb(105, 105, 105);
+}
+
+#paperType {
+  background-color: lightgreen;
+  color: #3d3d3d;
+}
+
+.profileImag {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.upperpart {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.profilepicture {
+  display: flex;
+  margin-bottom: 5px;
+}
+
+#pdf {
+  margin-right: 3px;
+}
+
+.pdf {
+  font-family: sans-serif;
+}
+
+.btnBookmark {
+  margin-top: 10px;
+  padding: 8px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: #ccc;
+  transition: color 0.3s ease;
+}
+
+.btnBookmark:hover {
+  color: red;
+}
+
+.bookmarked {
+  color: red;
+}
+
+.btnPrimary {
+  margin-top: 10px;
+  padding: 8px 16px;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.citeButton {
+  margin-top: 10px;
+  padding: 8px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: #ccc;
+  transition: color 0.3s ease;
+}
+
+.citeButton:hover {
+  color: #007bff;
+}
+
+.tooltip {
+  visibility: hidden;
+  width: 120px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.btnBookmark:hover .tooltip,
+.citeButton:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.deleteButton,
+.publishButton,
+.unpublishButton {
+  padding: 5px 10px;
+  margin-left: 10px;
+  cursor: pointer;
+  border: none;
+  border-radius: 3px;
+  font-size: 14px;
+}
+
+.deleteButton {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.publishButton {
+  background-color: #3498db;
+  color: white;
+}
+
+.unpublishButton {
+  background-color: #f39c12;
+  color: white;
+}
+
+.draftButton {
+  margin-top: 5px;
+}
+
+.deleteButton:hover,
+.publishButton:hover,
+.unpublishButton:hover {
+  opacity: 0.9;
+}
+
+.deleteButton,
+.publishButton,
+.unpublishButton {
+  margin-top: 5px;
+}
+
+.listButtons {
+  text-align: right;
+}

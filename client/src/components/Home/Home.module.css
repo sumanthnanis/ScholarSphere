@@ -1,0 +1,429 @@
+* {
+  font-family: "Circular", sans-serif;
+}
+.page {
+  display: flex;
+}
+.outputDiv {
+  display: flex;
+  flex-direction: column;
+}
+
+.innerDiv {
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  padding: 20px;
+  width: 90%;
+  margin-left: 25px;
+  margin-bottom: 11px;
+  margin-top: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 800px) {
+  .innerDiv {
+    width: 100%;
+    margin-left: 0;
+    margin-bottom: 15px;
+  }
+}
+.card {
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+/* Paper title */
+.navlink {
+  text-decoration: none;
+  color: #258eb2;
+}
+
+.navlink:hover {
+  text-decoration: underline;
+}
+.navlnk {
+  text-decoration: none;
+  color: black;
+}
+/* Paper details */
+.details {
+  display: flex;
+  justify-content: start;
+}
+.truncatedTitle {
+  color: #333;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; /* Limit to three lines */
+  overflow: hidden;
+  font-family: sans-serif;
+  font-weight: 550;
+
+  text-overflow: ellipsis;
+  cursor: pointer; /* Add pointer cursor for clickable effect */
+}
+.truncatedTitle:hover {
+  text-decoration: underline;
+  text-decoration-color: #333;
+}
+.h5 {
+  margin-top: 13px;
+  margin-bottom: 5px;
+  margin-right: 5px;
+  font-size: 14px;
+  font-family: sans-serif;
+  font-style: normal;
+  font-weight: 100;
+  padding: 3px;
+  color: #666;
+}
+#h5 {
+  background-color: rgb(200, 255, 200);
+  font-family: sans-serif;
+  font-style: normal;
+  font-weight: 100;
+  padding: 3px;
+  color: black;
+}
+.uploadedBy {
+  font-family: sans-serif;
+  font-style: normal;
+  color: #3498db;
+  font-size: 18px;
+  font-weight: 400;
+}
+.papertype {
+  font-family: sans-serif;
+  font-style: normal;
+  font-weight: 100;
+  color: rgb(105, 105, 105);
+}
+#paperType {
+  background-color: #d0eeed;
+  color: #003a37;
+}
+.profileImag {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.upperpart {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.profilepicture {
+  display: flex;
+  margin-bottom: 5px;
+}
+#pdf {
+  margin-right: 3px;
+}
+.pdf {
+  font-family: sans-serif;
+}
+.btnBookmark {
+  margin-top: 11px;
+  padding: 10px;
+  background-color: #fff;
+  border: none;
+  cursor: pointer;
+  color: #007bff;
+  transition: color 0.3s ease;
+}
+
+.btnBookmark:hover {
+  color: red;
+}
+
+.bookmarked {
+  color: red;
+}
+
+.btnPrimary {
+  margin-top: 10px;
+  padding: 8px 16px;
+  color: black;
+  border: 1px solid #007bff;
+  background-color: #fff;
+  color: #007bff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.btnPrimary:hover {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Popup content */
+.popupContent {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+}
+
+/* Close button */
+.close {
+  position: relative;
+  top: 10px;
+  left: 27vw;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: red;
+}
+
+.citePaper {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.citationsText {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.copyButton {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.copyButton:hover {
+  background-color: #0056b3;
+}
+
+/* Success message */
+.successMessage {
+  color: green;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+/* Cite icon */
+.citeButton {
+  margin-top: 10px;
+  padding: 8px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: #007bff;
+  transition: color 0.3s ease;
+}
+
+.citeButton:hover {
+  color: #007bff;
+}
+
+.tooltip {
+  visibility: hidden;
+  width: 120px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.btnBookmark:hover .tooltip,
+.citeButton:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+/* Paper title */
+
+.home-root {
+  position: relative;
+}
+.nav-div {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: auto;
+
+  background-color: white;
+}
+
+.authorSearch {
+  margin-left: 2.3vw;
+}
+.paperSearch {
+  margin-left: 5px;
+}
+.paperheader {
+  margin-top: 5px;
+  background-color: white;
+  font-family: sans-serif;
+  width: 70%;
+  margin-left: 25px;
+  margin-bottom: 10px;
+  border-radius: 5px 5px 0px 0px;
+}
+.total {
+  display: flex; /* Set display to flex */
+  margin-left: 1.3vw;
+  flex-direction: column;
+  margin-right: 25px;
+  /* Allow cards to wrap if necessary */
+}
+
+.authorCard {
+  margin: 10px;
+  display: inline-block; /* Change display to inline-block */
+  width: auto; /* Set width to auto */
+  text-decoration: none;
+  color: inherit;
+}
+@media (max-width: 800px) {
+  .authorCard {
+    display: block; /* Change display to block */
+    margin: 10px auto; /* Center the card by setting margin to auto */
+  }
+}
+
+.card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profileContainer {
+  display: flex;
+}
+
+.profileImage {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.detailsOverlay {
+  margin-left: 16px;
+}
+
+.userName {
+  margin: 0;
+  color: #3498db;
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.userInstitution {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.stats {
+  display: flex;
+  margin-top: 13px;
+}
+
+.statItem {
+  margin-right: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.statNumber {
+  font-size: 16px;
+  font-weight: bold;
+  margin-left: 40%;
+}
+
+.statLabel {
+  font-size: 14px;
+  color: #666;
+}
+
+.deleteButton,
+.publishButton,
+.unpublishButton {
+  padding: 5px 10px;
+  margin-left: 10px;
+  cursor: pointer;
+  border: none;
+  border-radius: 3px;
+  font-size: 14px;
+}
+
+.deleteButton {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.publishButton {
+  background-color: #3498db;
+  color: white;
+}
+
+.unpublishButton {
+  background-color: #f39c12;
+  color: white;
+}
+
+.draftButton {
+  margin-top: 5px;
+}
+
+.deleteButton:hover,
+.publishButton:hover,
+.unpublishButton:hover {
+  opacity: 0.9;
+}
+
+.deleteButton,
+.publishButton,
+.unpublishButton {
+  margin-top: 5px; /* Add margin between buttons */
+}
+
+.listButtons {
+  text-align: right;
+}
+.star {
+  cursor: pointer;
+  color: gray; /* Inactive star color */
+}
+
+.star.active {
+  color: gold; /* Active star color */
+}

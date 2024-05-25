@@ -1,0 +1,376 @@
+.ui-w-80 {
+  width: 80px !important;
+  height: auto;
+}
+
+.cardBody {
+  flex-grow: 1;
+  height: 60vh;
+  padding: 16px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow-y: auto;
+}
+
+.btn-default {
+  border-color: rgba(24, 28, 33, 0.1);
+  background: rgba(0, 0, 0, 0);
+  color: #4e5155;
+}
+
+label.btn {
+  margin-bottom: 0;
+}
+
+.btn-outline-primary {
+  border-color: #26b4ff;
+  background: transparent;
+  color: #26b4ff;
+}
+
+.btn {
+  cursor: pointer;
+}
+
+.text-light {
+  color: #babbbc !important;
+}
+
+.card {
+  background-clip: padding-box;
+  box-shadow: 0 1px 4px rgba(24, 28, 33, 0.012);
+}
+
+.account-settings-fileinput {
+  position: absolute;
+  visibility: hidden;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.account-settings-links .list-group-item.active {
+  font-weight: bold !important;
+}
+
+html:not(.dark-style) .account-settings-links .list-group-item.active {
+  background: transparent !important;
+}
+
+.account-settings-multiselect ~ .select2-containerr {
+  width: 100% !important;
+}
+
+.light-style .account-settings-links .list-group-item {
+  padding: 0.85rem 1.5rem;
+  border-color: rgba(24, 28, 33, 0.03) !important;
+}
+
+.light-style .account-settings-links .list-group-item.active {
+  color: #4e5155 !important;
+}
+
+.material-style .account-settings-links .list-group-item {
+  padding: 0.85rem 1.5rem;
+  border-color: rgba(24, 28, 33, 0.03) !important;
+}
+
+.material-style .account-settings-links .list-group-item.active {
+  color: #4e5155 !important;
+}
+
+.dark-style .account-settings-links .list-group-item {
+  padding: 0.85rem 1.5rem;
+  border-color: rgba(255, 255, 255, 0.03) !important;
+}
+
+.dark-style .account-settings-links .list-group-item.active {
+  color: #fff !important;
+}
+
+.light-style .account-settings-links .list-group-item.active {
+  color: #4e5155 !important;
+}
+
+.light-style .account-settings-links .list-group-item {
+  padding: 0.85rem 1.5rem;
+  border-color: rgba(24, 28, 33, 0.03) !important;
+}
+
+/* Profile.css */
+.editButton {
+  margin-top: 5px;
+  padding: 6px 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.profileImage {
+  display: block;
+  margin-top: 10px;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+}
+
+.list-group {
+  margin-top: 20px;
+}
+.heading {
+  font-weight: bold;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  font-size: 25px;
+  margin-bottom: 24px;
+}
+.containerr {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+/* Card */
+.card {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.row-bordered {
+  border-bottom: 1px solid #ccc;
+  overflow: hidden;
+  border-color: #e9ecef;
+}
+
+/* .row-border-light {
+    border-color: #e9ecef;
+  } */
+
+.general-image {
+  align-items: center;
+}
+
+/* Tab Links */
+.list-group-item {
+  /* background-color: #f8f9fa; */
+  border-color: #e9ecef;
+  padding: 12px 16px;
+  cursor: pointer;
+}
+
+.list-group-item.active {
+  background-color: rgba(14, 165, 233, 0.1);
+  --tw-text-opacity: 1;
+  background-color: skyblue;
+  color: rgb(3 105 161 / var(--tw-text-opacity));
+  font-weight: bold;
+}
+
+.list-group-line {
+  margin-top: 10px;
+  background-color: slategray;
+}
+/* Tab Content */
+.tab-content {
+  padding: 20px;
+}
+
+.tab-pane {
+  display: none;
+}
+
+.tab-pane.active {
+  display: block;
+}
+
+/* Forms */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  font-weight: bold;
+  margin-bottom: 4px;
+  display: flex;
+  box-sizing: border-box;
+  flex-wrap: nowrap;
+  color: #718096;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #333;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-top: 1px;
+  margin-bottom: 1px;
+}
+
+/* Buttons */
+.buttons {
+  text-align: right;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  margin-right: 10px;
+}
+.btn {
+  display: inline-block;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.42857143;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-default {
+  color: #333;
+  background-color: #fff;
+  border-color: #ccc;
+}
+
+/* Image */
+
+.card-body {
+  /* display: flex; */
+  align-items: center;
+  padding: 16px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.profile-image {
+  display: block;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  align-items: center;
+}
+
+.media-body {
+  margin-left: 16px;
+  /* display: flex; */
+  flex-direction: column;
+}
+
+.upload-btn {
+  /* display: inline-block; */
+  padding: 6px 12px;
+  margin-bottom: 8px;
+  color: #007bff;
+  border: 1px solid #007bff;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.upload-btn input[type="file"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.reset-btn {
+  padding: 6px 12px;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f8f9fa;
+  cursor: pointer;
+}
+
+.text-light {
+  color: #6c757d;
+}
+
+.small {
+  font-size: 80%;
+}
+
+.mt-1 {
+  margin-top: 4px;
+}
+
+@media (max-width: 768px) {
+  .list-group-item {
+    /* padding: 15px 20px; */
+    padding: 12px 16px;
+    font-size: 16px;
+  }
+  .list-group-item.active {
+    padding: 12px 16px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 576px) {
+  .list-group-item {
+    padding: 10px 14px;
+    font-size: 12.1px;
+  }
+  .list-group-item.active {
+    padding: 10px 14px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 470px) {
+  .list-group {
+    display: flex;
+  }
+  .list-group-item {
+    padding: 5px 7px;
+    font-size: 12.1px;
+    /* border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #f9f9f9; */
+    /* gap: 30px; */
+  }
+  .list-group-item.active {
+    padding: 5px 7px;
+    font-size: 12px;
+  }
+
+  .containerr {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    margin-bottom: 20px;
+    height: 50vh;
+  }
+
+  .heading {
+    font-weight: bold;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+}
