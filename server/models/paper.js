@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
 const PaperSchema = new mongoose.Schema(
   {
@@ -15,6 +16,7 @@ const PaperSchema = new mongoose.Schema(
     bookmarks: { type: Number, default: 0 },
     bookmarkedBy: { type: [String], default: [] },
     Author: { type: Number, default: 0 },
+    averageRating: { type: Number, default: 0 }, // Add averageRating field
   },
   { collection: "paperDetails" }
 );

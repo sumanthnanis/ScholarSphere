@@ -4,7 +4,7 @@ import { toast } from "sonner";
 
 export const toggleBookmark = async (
   index,
-  
+
   paperId,
   papers,
   bookmarkedPapers,
@@ -54,7 +54,6 @@ export const toggleBookmark = async (
   }
 };
 
-
 export const showPdf = async (fileName) => {
   const url = `http://localhost:8000/files/${fileName}`;
 
@@ -86,7 +85,7 @@ export const fetchProfiles = async () => {
     const profilesArray = Array.isArray(profilesData)
       ? profilesData
       : [profilesData];
-     
+
     console.log("these are profiles", profilesArray);
     return profilesArray;
   } catch (error) {
@@ -95,7 +94,12 @@ export const fetchProfiles = async () => {
   }
 };
 
-export const handleCiteThisPaper = async (selectedPaper, setPapers,setCopySuccess,papers) => {
+export const handleCiteThisPaper = async (
+  selectedPaper,
+  setPapers,
+  setCopySuccess,
+  papers
+) => {
   if (!selectedPaper) return;
 
   try {
@@ -122,10 +126,24 @@ export const handleCiteThisPaper = async (selectedPaper, setPapers,setCopySucces
     const citationText = `Title: ${selectedPaper.title}, Author: ${selectedPaper.uploadedBy}`;
     await navigator.clipboard.writeText(citationText);
     console.log("Citation copied to clipboard:", citationText);
-    setCopySuccess(true); 
+    setCopySuccess(true);
   } catch (error) {
     console.error("Error citing paper:", error);
   }
 };
 
+export const fetchPapers = async (setPapers) => {
+  try {
+    console.log("dgdgddh");
+    let url = "http://localhost:8000/api/get-papers";
+    const params = new URLSearchParams();
 
+    const response = await axios.get(url);
+    const papersData = response.data;
+
+    setPapers(papersData);
+  } catch (error) {
+    console.error("Error fetching papers:", error);
+  }
+};
+// apiUtils.js

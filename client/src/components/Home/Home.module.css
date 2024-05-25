@@ -413,17 +413,30 @@
 .deleteButton,
 .publishButton,
 .unpublishButton {
-  margin-top: 5px; /* Add margin between buttons */
+  margin-top: 5px;
 }
 
 .listButtons {
   text-align: right;
 }
-.star {
-  cursor: pointer;
-  color: gray; /* Inactive star color */
+.rating {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
 }
 
-.star.active {
-  color: gold; /* Active star color */
+.stars {
+  display: flex;
+  flex-direction: row;
+}
+.rateauthor {
+  display: flex;
+  justify-content: end;
+}
+.star:hover {
+  color: gold;
+}
+
+.averageRating {
+  margin-left: 5px;
 }

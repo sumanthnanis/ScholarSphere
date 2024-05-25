@@ -229,13 +229,15 @@ const Home = () => {
                   bookmarkedPapers,
                   setPapers,
                   setBookmarkedPapers,
-                  data.username
+                  data.username,
+                  setPapers
                 )
               }
               showPdf={showPdf}
               handleCitePopup={(paper) =>
                 handleCitePopup(paper, setSelectedPaper, setShowPopup)
               }
+              setPapers={setPapers}
             />
           </div>
           <div className={styles.total}>

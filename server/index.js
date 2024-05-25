@@ -7,7 +7,8 @@ const Profile = require("./models/profile.model.js");
 const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const path = require("path");
-const { profile } = require("console");
+
+const Rating = require("./models/rating.model.js");
 const app = express();
 const { ObjectId } = mongoose.Types;
 
@@ -315,6 +316,7 @@ app.get("/api/get-papers", async (req, res) => {
 
     const papers = await Paper.find({ draft: 0 });
     res.send(papers);
+    console.log(papers);
   } catch (error) {
     console.error("Error fetching papers:", error);
     res.status(500).json({ status: "error" });
@@ -546,43 +548,62 @@ app.get("/api/bookmarked-papers/:username", async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
-app.post("/api/rate", async (req, res) => {
-  const { author, rating } = req.body;
+app.post("/api/rate-paper", async (req, res) => {
+  const { paperId, username, rating } = req.body;
 
   try {
-    // Find the profile by username and update the rating
-    const profile = await Profile.findOneAndUpdate(
-      { username: author },
-      { rating: rating },
-      { new: true }
-    );
-
-    if (!profile) {
-      return res.status(404).json({ message: "Profile not found" });
+    const paper = await Paper.findById(paperId);
+    if (!paper) {
+      return res.status(404).send({ message: "Paper not found" });
     }
 
-    res.status(200).json({ message: "Rating submitted successfully" });
+    let existingRating = await Rating.findOne({ paperId, username });
+
+    if (existingRating) {
+      existingRating.rating = rating;
+      await existingRating.save();
+    } else {
+      existingRating = new Rating({ paperId, username, rating });
+      await existingRating.save();
+    }
+
+    const ratings = await Rating.find({ paperId });
+    const totalRatings = ratings.length;
+    const sumOfRatings = ratings.reduce(
+      (sum, rating) => sum + rating.rating,
+      0
+    );
+    const newAverageRating = totalRatings > 0 ? sumOfRatings / totalRatings : 0;
+
+    paper.averageRating = newAverageRating;
+    await paper.save();
+
+    res.send({ message: "Rating submitted successfully" });
   } catch (error) {
     console.error("Error submitting rating:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).send({ message: "Internal server error" });
   }
 });
-
-// Endpoint to get ratings
-app.get("/api/ratings", async (req, res) => {
+app.get("/api/get-ratings/:paperId", async (req, res) => {
   try {
-    // Fetch all profiles and their ratings
-    const profiles = await Profile.find({}, "username rating");
+    const paperId = req.params.paperId;
+    const username = req.query.username;
 
-    // Construct an object with username as key and rating as value
-    const ratings = {};
-    profiles.forEach((profile) => {
-      ratings[profile.username] = profile.rating;
-    });
+    const paper = await Paper.findById(paperId);
 
-    res.status(200).json(ratings);
+    if (!paper) {
+      return res.status(404).send({ message: "Paper not found" });
+    }
+
+    let userRating = null;
+    if (username) {
+      const rating = await Rating.findOne({ paperId, username });
+      userRating = rating ? rating.rating : null;
+    }
+
+    res.json({ averageRating: paper.averageRating, userRating });
   } catch (error) {
-    console.error("Error fetching ratings:", error);
-    res.status(500).json({ message: "Internal server error" });
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
   }
 });
