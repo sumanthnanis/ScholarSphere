@@ -70,17 +70,18 @@ const PaperList = ({
     const profile = profiles.find((profile) => profile.username === username);
     return profile ? `http://localhost:8000${profile.profileImage}` : logo;
   };
+
   const renderStars = (paperId) => {
     const { averageRating, userRating } = existingRatings[paperId] || {};
+    const userHasRated = userRating !== null;
 
-    const ratingToDisplay =
-      userRating !== null ? userRating : averageRating || 0;
+    const ratingToDisplay = userHasRated ? userRating : averageRating || 0;
 
     return [1, 2, 3, 4, 5].map((star) => (
       <FaStar
         key={star}
         className={styles.star}
-        color={star <= ratingToDisplay ? "gold" : "#007bff"}
+        color={userHasRated && star <= ratingToDisplay ? "gold" : "violet"}
         onClick={() => handleRatingChange(paperId, star)}
       />
     ));
