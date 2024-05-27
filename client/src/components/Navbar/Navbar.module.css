@@ -56,7 +56,7 @@
 .navLinks:hover {
   background-color: #e6e5e5;
   color: #333;
-  padding: 12px;
+
   border-radius: 30px;
 }
 
@@ -122,10 +122,6 @@ ul {
   padding: 10px 0;
   width: 200px;
   z-index: 1;
-}
-
-.listdrop {
-  padding: 10px;
 }
 
 .listdrop:hover {

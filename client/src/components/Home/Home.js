@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import axios from "axios";
 import styles from "./Home.module.css";
 import PaperList from "../Paper/Paper";
-import { toast, Toaster } from "sonner";
+import { Toaster } from "sonner";
 import Navbar from "../Navbar/Navbar";
 import BookmarksContext from "../../BookmarksContext";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,7 +15,6 @@ import {
   fetchProfiles,
   handleCiteThisPaper,
 } from "../../utils/util";
-import { FaStar } from "react-icons/fa";
 
 const Home = () => {
   const { bookmarkedPapers, setBookmarkedPapers } =
@@ -26,14 +25,13 @@ const Home = () => {
   const [category, setCategory] = useState("");
   const [profiles, setProfiles] = useState([]);
   const [role, setRole] = useState("");
-  const [userProfile, setUserProfile] = useState([]);
   const dispatch = useDispatch();
   const data = useSelector((prev) => prev.auth.user);
-
+  const [displayedPapers, setDisplayedPapers] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [selectedPaper, setSelectedPaper] = useState(null);
   const [copySuccess, setCopySuccess] = useState(false);
-
+  const papersPerLoad = 10;
   useEffect(() => {
     fetchProfilesWithRatings();
   }, []);
@@ -41,6 +39,13 @@ const Home = () => {
   useEffect(() => {
     fetchPapers(profiles);
   }, [sortBy, category]);
+  useEffect(() => {
+    const loadInitialPapers = () => {
+      setDisplayedPapers(papers.slice(0, papersPerLoad));
+    };
+
+    loadInitialPapers();
+  }, [papers]);
 
   const fetchPapers = async (profilesData = profiles) => {
     try {
@@ -65,9 +70,10 @@ const Home = () => {
       const response = await axios.get(url);
       const papersData = response.data;
 
-      const userProfile = profilesData.find(
+      const userProfile = profiles.find(
         (profile) => profile.username === data.username
       );
+      console.log(profiles);
       const userSkillsString = userProfile
         ? userProfile.skills.toLowerCase()
         : "";
@@ -87,7 +93,21 @@ const Home = () => {
         (a, b) => new Date(b.publicationDate) - new Date(a.publicationDate)
       );
 
-      setPapers(matchedPapers.length > 0 ? matchedPapers : papersData);
+      const unmatchedPapers = papersData.filter((paper) => {
+        const paperCategories = paper.categories.map((category) =>
+          category.toLowerCase()
+        );
+        return (
+          !userSkills ||
+          !userSkills.some((skill) => paperCategories.includes(skill))
+        );
+      });
+
+      unmatchedPapers.sort(
+        (a, b) => new Date(b.publicationDate) - new Date(a.publicationDate)
+      );
+
+      setPapers([...matchedPapers, ...unmatchedPapers]);
 
       setBookmarkedPapers(
         papersData.filter((paper) => paper.bookmarkedBy.includes(data.username))
@@ -163,7 +183,6 @@ const Home = () => {
     localStorage.setItem("role", role);
   }, [role]);
 
-  // Sort the profiles by averageRating in descending order
   const sortedProfiles = [...aggregatedProfiles].sort(
     (a, b) => b.averageRating - a.averageRating
   );
@@ -173,16 +192,6 @@ const Home = () => {
         profile.username.toLowerCase().includes(searchQuery.toLowerCase())
       )
     : sortedProfiles;
-
-  const renderStars = (rating) => {
-    return [1, 2, 3, 4, 5].map((star) => (
-      <FaStar
-        key={star}
-        className={styles.star}
-        color={star <= rating ? "gold" : "grey"}
-      />
-    ));
-  };
 
   const fetchProfilesWithRatings = async () => {
     try {
@@ -201,6 +210,27 @@ const Home = () => {
       console.error("Error fetching profiles with ratings:", error);
     }
   };
+  const loadMorePapers = () => {
+    const nextPagePapers = papers.slice(
+      displayedPapers.length,
+      displayedPapers.length + papersPerLoad
+    );
+    setDisplayedPapers((prevPapers) => [...prevPapers, ...nextPagePapers]);
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + window.scrollY >=
+        document.body.offsetHeight - 100
+      ) {
+        loadMorePapers();
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [displayedPapers]);
 
   return (
     <>
@@ -212,57 +242,60 @@ const Home = () => {
             setCategory={setCategory}
             handleChange={handleSearch}
             searchQuery={searchQuery}
-            hideCategoriesFiler={true}
           />
         </div>
         <div className={styles.page}>
-          <div className={styles.outputDiv}>
-            <div className={styles.paperheader}>
-              {searchQuery ? (
-                <span className={styles.paperSearch}>
-                  Search Results for {searchQuery} in Papers
-                </span>
-              ) : category ? (
-                <span className={styles.paperCategory}>
-                  Showing Papers On {category}
-                </span>
-              ) : sortBy ? (
-                <span className={styles.paperFilter}>{sortBy} Papers</span>
-              ) : (
-                <span></span>
-              )}
+          <div className={styles.outputDivWrapper}>
+            <div className={styles.outputDiv}>
+              <div className={styles.paperheader}>
+                {searchQuery ? (
+                  <div className={styles.heading}>
+                    Search Results for {searchQuery} in Papers
+                  </div>
+                ) : category ? (
+                  <div className={styles.heading}>
+                    Showing Papers On {category}
+                  </div>
+                ) : sortBy ? (
+                  <div className={styles.heading}>{sortBy} Papers</div>
+                ) : (
+                  <div className={styles.heading}>
+                    Researches based on your intrests
+                  </div>
+                )}
+              </div>
+              <PaperList
+                papers={displayedPapers}
+                bookmarks={displayedPapers.map((paper) =>
+                  bookmarkedPapers.some((bp) => bp._id === paper._id)
+                )}
+                toggleBookmark={(index, id) =>
+                  toggleBookmark(
+                    index,
+                    id,
+                    displayedPapers,
+
+                    bookmarkedPapers,
+
+                    setPapers,
+                    setBookmarkedPapers,
+                    data.username
+                  )
+                }
+                showPdf={showPdf}
+                handleCitePopup={(paper) =>
+                  handleCitePopup(paper, setSelectedPaper, setShowPopup)
+                }
+              />
             </div>
-            <PaperList
-              papers={papers}
-              bookmarks={papers.map((paper) =>
-                bookmarkedPapers.some((bp) => bp._id === paper._id)
-              )}
-              toggleBookmark={(index, id) =>
-                toggleBookmark(
-                  index,
-                  id,
-                  papers,
-                  bookmarkedPapers,
-                  setPapers,
-                  setBookmarkedPapers,
-                  data.username
-                )
-              }
-              showPdf={showPdf}
-              handleCitePopup={(paper) =>
-                handleCitePopup(paper, setSelectedPaper, setShowPopup)
-              }
-            />
           </div>
           <div className={styles.total}>
             {filteredProfiles.length > 0 && (
               <div className={styles.authorDiv}>
-                <div className={styles.header}>
-                  <span className={styles.authorSearch}>
-                    {searchQuery
-                      ? `Search Results for ${searchQuery} in Authors`
-                      : ""}
-                  </span>
+                <div className={styles.headin}>
+                  {searchQuery
+                    ? `Search Results for ${searchQuery} in Authors`
+                    : "Top Authors"}
                 </div>
               </div>
             )}
@@ -317,8 +350,6 @@ const Home = () => {
                           </span>
                           <span className={styles.statLabel}>Reads</span>
                         </div>
-                        <div className={styles.statDivider}></div>
-                        <div className={styles.statItem}></div>
                       </div>
                     </div>
                   </div>

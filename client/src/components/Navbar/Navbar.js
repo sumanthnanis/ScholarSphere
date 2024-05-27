@@ -15,9 +15,9 @@ function Navbar({
   searchQuery = null,
   hideCategoriesFilter = false,
 }) {
-  console.log(hideCategoriesFilter);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const [activeDropdow, setActiveDropdow] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [authors, setAuthors] = useState([]);
   const [isMediumScreen, setIsMediumScreen] = useState(
@@ -67,9 +67,8 @@ function Navbar({
   const toggleDropdown = (dropdown) => {
     setActiveDropdown(activeDropdown === dropdown ? null : dropdown);
   };
-
-  const handleMouseLeaveDropdown = () => {
-    setActiveDropdown(null);
+  const toggleDropdow = (dropdown) => {
+    setActiveDropdow(activeDropdow === dropdown ? null : dropdown);
   };
 
   const handleMyPapersClick = () => {
@@ -107,60 +106,53 @@ function Navbar({
                 searchQuery={searchQuery}
               />
             )}
-          {hideCategoriesFilter && (
+          {
             <li className={styles.navLinks}>
               <NavLink className={styles.linked} to="/home">
                 Home
               </NavLink>
             </li>
-          )}
+          }
 
-          {(data.role === "user" || data.role === "author") &&
-            !hideCategoriesFilter && (
-              <>
-                <li
-                  className={`${styles.navLinkss} ${styles.dropdownToggle}`}
-                  onMouseEnter={() => toggleDropdown("categories")}
-                  onMouseLeave={handleMouseLeaveDropdown}
-                >
-                  Categories <i className="fas fa-caret-down" />
-                  {activeDropdown === "categories" && (
-                    <Dropdown
-                      className={styles.dropdown}
-                      items={MenuItems}
-                      handleCategoryClick={handleCategoryClick}
-                      onMouseLeave={handleMouseLeaveDropdown}
-                    />
-                  )}
-                </li>
-                <li
-                  className={`${styles.navLinkss} ${styles.dropdownToggle}`}
-                  onMouseEnter={() => toggleDropdown("filter")}
-                  onMouseLeave={() => setTimeout(handleMouseLeaveDropdown, 100)}
-                >
-                  Filter <i className="fas fa-caret-down" />
-                  {activeDropdown === "filter" && (
-                    <ul
-                      className={styles.filterDropdown}
-                      onMouseLeave={handleMouseLeaveDropdown}
+          {(data.role === "user" || data.role === "author") && (
+            <>
+              <li
+                className={`${styles.navLinkss} ${styles.dropdownToggle}`}
+                onClick={() => toggleDropdown("categories")}
+              >
+                Categories <i className="fas fa-caret-down" />
+                {activeDropdown === "categories" && (
+                  <Dropdown
+                    className={styles.dropdown}
+                    items={MenuItems}
+                    handleCategoryClick={handleCategoryClick}
+                  />
+                )}
+              </li>
+              <li
+                className={`${styles.navLinkss} ${styles.dropdownToggle}`}
+                onClick={() => toggleDropdow("filter")}
+              >
+                Filter <i className="fas fa-caret-down" />
+                {activeDropdow === "filter" && (
+                  <ul className={styles.filterDropdown}>
+                    <li
+                      className={styles.filterItem}
+                      onClick={handleMostViewedClick}
                     >
-                      <li
-                        className={styles.filterItem}
-                        onClick={handleMostViewedClick}
-                      >
-                        Most Viewed
-                      </li>
-                      <li
-                        className={styles.filterItem}
-                        onClick={handleMostCitedClick}
-                      >
-                        Most Cited
-                      </li>
-                    </ul>
-                  )}
-                </li>
-              </>
-            )}
+                      Most Viewed
+                    </li>
+                    <li
+                      className={styles.filterItem}
+                      onClick={handleMostCitedClick}
+                    >
+                      Most Cited
+                    </li>
+                  </ul>
+                )}
+              </li>
+            </>
+          )}
           {(data.role === "user" || data.role === "author") &&
             !isMediumScreen && (
               <>
@@ -200,10 +192,7 @@ function Navbar({
                 </div>
               </button>
               {activeDropdown === "userMenu" && (
-                <ul
-                  className={styles.menudrop}
-                  onMouseLeave={handleMouseLeaveDropdown}
-                >
+                <ul className={styles.menudrop}>
                   <li className={styles.listdrop}>
                     <NavLink className={styles.navitem} to="/user/profile">
                       Your profile
@@ -232,11 +221,10 @@ function Navbar({
                     </>
                   )}
                   <li
-                    className={styles.navitem}
-                    id={styles.listdrop}
+                    className={styles.listdrop}
                     onClick={() => handleLogout()}
                   >
-                    Logout
+                    <div className={styles.navitem}>Logout</div>
                   </li>
                 </ul>
               )}

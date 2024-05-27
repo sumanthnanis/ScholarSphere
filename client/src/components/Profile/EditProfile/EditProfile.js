@@ -5,13 +5,15 @@ import { Toaster, toast } from "sonner";
 import AuthorPapers from "../../AuthorPapers/AuthorPapers";
 import UserFiles from "../UserFiles/UserFiles";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 
-const EditProfile = () => {
+const EditProfile = ({ initialActiveTab }) => {
   const [image, setImage] = useState(null);
-  const [activeTab, setActiveTab] = useState("account-general");
+  const [activeTab, setActiveTab] = useState(initialActiveTab ||"account-general");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const data = useSelector((prev) => prev.auth.user);
+  const location = useLocation();
 
   const [formData, setFormData] = useState({
     degree: "",
@@ -41,11 +43,11 @@ const EditProfile = () => {
   };
 
   useEffect(() => {
-    fetchProfileData();
-    if (data && data.activeTab) {
-      setActiveTab(data.activeTab);
+    if (location.state && location.state.activeTab) {
+      setActiveTab(location.state.activeTab);
     }
-  }, [data]);
+    fetchProfileData();
+  }, [location]);
 
   const fetchProfileData = async () => {
     try {

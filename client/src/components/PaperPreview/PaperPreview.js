@@ -7,6 +7,7 @@ import styles from "./PaperPreview.module.css";
 import PaperList from "../Paper/Paper";
 import { toast, Toaster } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
+
 import {
   toggleBookmark,
   showPdf,
@@ -20,6 +21,13 @@ const PaperPreview = () => {
   const data = useSelector((prev) => prev.auth.user);
   const { id } = useParams();
   const [papers, setPapers] = useState([]);
+  const [sortBy, setSortBy] = useState("");
+  const [category, setCategory] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
   const { bookmarkedPapers, setBookmarkedPapers } =
     useContext(BookmarksContext);
   const [relatedPapers, setRelatedPapers] = useState([]);
@@ -92,7 +100,12 @@ const PaperPreview = () => {
     <div>
       <Toaster richColors position="top-right" />
 
-      <Navbar hideCategoriesFilter={true} />
+      <Navbar
+        setSortBy={setSortBy}
+        setCategory={setCategory}
+        handleChange={handleSearch}
+        searchQuery={searchQuery}
+      />
       <div className={styles.paperpreviewcontainer}>
         <div className={styles.paperdetails}>
           <div className={styles.uppercon}>
@@ -151,6 +164,7 @@ const PaperPreview = () => {
 
         <div className={styles.relatedPapers}>
           <h3 className={styles.h3}>Related Papers</h3>
+
           <PaperList
             papers={relatedPapers}
             bookmarks={relatedPapers.map((paper) =>

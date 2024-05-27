@@ -5,13 +5,13 @@ import axios from "axios";
 import "./Upload.css";
 
 import { useDispatch, useSelector } from "react-redux";
+import Navbar from "../Navbar/Navbar";
 
 const Upload = () => {
-  
   const [file, setFile] = useState(null);
   const [msg, setMsg] = useState(null);
-const dispatch = useDispatch();
-const data = useSelector((prev) => prev.auth.user);
+  const dispatch = useDispatch();
+  const data = useSelector((prev) => prev.auth.user);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [paperType, setPaperType] = useState("");
@@ -23,7 +23,7 @@ const data = useSelector((prev) => prev.auth.user);
     backendDevelopment: false,
     databases: false,
   });
-  
+
   const onDropHandler = useCallback((acceptedFiles) => {
     const selectedFile = acceptedFiles[0];
     const fileName = selectedFile.name;

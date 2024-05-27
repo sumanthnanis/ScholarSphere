@@ -4,6 +4,7 @@
 .page {
   display: flex;
 }
+
 .outputDiv {
   display: flex;
   flex-direction: column;
@@ -13,8 +14,9 @@
   background-color: #fff;
   border: 1px solid #e0e0e0;
   padding: 20px;
-  width: 90%;
-  margin-left: 25px;
+  width: 95%;
+  margin-left: 20px;
+
   margin-bottom: 11px;
   margin-top: 10px;
   border-radius: 5px;
@@ -27,6 +29,17 @@
     margin-left: 0;
     margin-bottom: 15px;
   }
+}
+.heading {
+  font-size: 18.52px;
+  font-weight: 550;
+  margin-top: 15px;
+}
+.headin {
+  font-size: 18.52px;
+  font-weight: 550;
+  margin-top: 15px;
+  margin-bottom: 10px;
 }
 .card {
   background-color: #fff;
@@ -279,7 +292,7 @@
   top: 0;
   width: 100%;
   height: auto;
-
+  z-index: 100;
   background-color: white;
 }
 
@@ -290,28 +303,20 @@
   margin-left: 5px;
 }
 .paperheader {
-  margin-top: 5px;
   background-color: white;
   font-family: sans-serif;
   width: 70%;
   margin-left: 25px;
-  margin-bottom: 10px;
+
   border-radius: 5px 5px 0px 0px;
-}
-.total {
-  display: flex; /* Set display to flex */
-  margin-left: 1.3vw;
-  flex-direction: column;
-  margin-right: 25px;
-  /* Allow cards to wrap if necessary */
 }
 
 .authorCard {
-  margin: 10px;
   display: inline-block; /* Change display to inline-block */
   width: auto; /* Set width to auto */
   text-decoration: none;
   color: inherit;
+  margin-bottom: 10px;
 }
 @media (max-width: 800px) {
   .authorCard {
@@ -441,7 +446,7 @@
   margin-left: 5px;
 }
 
-.starsHome{
+.starsHome {
   display: flex;
   flex-direction: row;
   margin-bottom: 3px;

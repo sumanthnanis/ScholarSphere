@@ -14,8 +14,6 @@ const Login = () => {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
-
-  
   const dispatch = useDispatch();
   const toggleSignUp = () => {
     setIsSignUp(!isSignUp);
