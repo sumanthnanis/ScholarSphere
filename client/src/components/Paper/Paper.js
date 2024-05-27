@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { FaBookmark, FaStar } from "react-icons/fa";
-import styles from "../Home/Home.module.css";
+import styles from "./paper.module.css";
 import logo from "../Img/myself.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProfiles } from "../../utils/util";

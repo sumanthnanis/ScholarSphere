@@ -9,7 +9,9 @@ import { useLocation } from "react-router-dom";
 
 const EditProfile = ({ initialActiveTab }) => {
   const [image, setImage] = useState(null);
-  const [activeTab, setActiveTab] = useState(initialActiveTab ||"account-general");
+  const [activeTab, setActiveTab] = useState(
+    initialActiveTab || "account-general"
+  );
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const data = useSelector((prev) => prev.auth.user);

@@ -10,26 +10,6 @@
   flex-direction: column;
 }
 
-.innerDiv {
-  background-color: #fff;
-  border: 1px solid #e0e0e0;
-  padding: 20px;
-  width: 95%;
-  margin-left: 20px;
-
-  margin-bottom: 11px;
-  margin-top: 10px;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-@media (max-width: 800px) {
-  .innerDiv {
-    width: 100%;
-    margin-left: 0;
-    margin-bottom: 15px;
-  }
-}
 .heading {
   font-size: 18.52px;
   font-weight: 550;
@@ -51,131 +31,12 @@
   width: 100%;
   box-sizing: border-box;
 }
-/* Paper title */
-.navlink {
-  text-decoration: none;
-  color: #258eb2;
-}
 
-.navlink:hover {
-  text-decoration: underline;
-}
-.navlnk {
-  text-decoration: none;
-  color: black;
-}
-/* Paper details */
-.details {
-  display: flex;
-  justify-content: start;
-}
-.truncatedTitle {
-  color: #333;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3; /* Limit to three lines */
-  overflow: hidden;
-  font-family: sans-serif;
-  font-weight: 550;
-
-  text-overflow: ellipsis;
-  cursor: pointer; /* Add pointer cursor for clickable effect */
-}
-.truncatedTitle:hover {
-  text-decoration: underline;
-  text-decoration-color: #333;
-}
-.h5 {
-  margin-top: 13px;
-  margin-bottom: 5px;
-  margin-right: 5px;
-  font-size: 14px;
-  font-family: sans-serif;
-  font-style: normal;
-  font-weight: 100;
-  padding: 3px;
-  color: #666;
-}
-#h5 {
-  background-color: rgb(200, 255, 200);
-  font-family: sans-serif;
-  font-style: normal;
-  font-weight: 100;
-  padding: 3px;
-  color: black;
-}
-.uploadedBy {
-  font-family: sans-serif;
-  font-style: normal;
-  color: #3498db;
-  font-size: 18px;
-  font-weight: 400;
-}
-.papertype {
-  font-family: sans-serif;
-  font-style: normal;
-  font-weight: 100;
-  color: rgb(105, 105, 105);
-}
-#paperType {
-  background-color: #d0eeed;
-  color: #003a37;
-}
-.profileImag {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-right: 10px;
-}
-
-.upperpart {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.profilepicture {
-  display: flex;
-  margin-bottom: 5px;
-}
 #pdf {
   margin-right: 3px;
 }
 .pdf {
   font-family: sans-serif;
-}
-.btnBookmark {
-  margin-top: 11px;
-  padding: 10px;
-  background-color: #fff;
-  border: none;
-  cursor: pointer;
-  color: #007bff;
-  transition: color 0.3s ease;
-}
-
-.btnBookmark:hover {
-  color: red;
-}
-
-.bookmarked {
-  color: red;
-}
-
-.btnPrimary {
-  margin-top: 10px;
-  padding: 8px 16px;
-  color: black;
-  border: 1px solid #007bff;
-  background-color: #fff;
-  color: #007bff;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-.btnPrimary:hover {
-  background-color: #007bff;
-  color: #fff;
 }
 
 .popup {
@@ -238,51 +99,11 @@
   background-color: #0056b3;
 }
 
-/* Success message */
 .successMessage {
   color: green;
   font-size: 14px;
   margin-top: 5px;
 }
-
-/* Cite icon */
-.citeButton {
-  margin-top: 10px;
-  padding: 8px;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  color: #007bff;
-  transition: color 0.3s ease;
-}
-
-.citeButton:hover {
-  color: #007bff;
-}
-
-.tooltip {
-  visibility: hidden;
-  width: 120px;
-  background-color: #333;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-  position: absolute;
-  z-index: 1;
-  bottom: 125%;
-  left: 50%;
-  transform: translateX(-50%);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.btnBookmark:hover .tooltip,
-.citeButton:hover .tooltip {
-  visibility: visible;
-  opacity: 1;
-}
-/* Paper title */
 
 .home-root {
   position: relative;
@@ -295,7 +116,10 @@
   z-index: 100;
   background-color: white;
 }
-
+.total {
+  width: 43%;
+  margin-right: 20px;
+}
 .authorSearch {
   margin-left: 2.3vw;
 }
@@ -378,76 +202,29 @@
   font-size: 14px;
   color: #666;
 }
-
-.deleteButton,
-.publishButton,
-.unpublishButton {
-  padding: 5px 10px;
-  margin-left: 10px;
-  cursor: pointer;
-  border: none;
-  border-radius: 3px;
-  font-size: 14px;
+/* Default desktop view */
+.total {
+  display: block;
 }
 
-.deleteButton {
-  background-color: #e74c3c;
-  color: white;
+.toggle-dropdown {
+  display: none;
 }
 
-.publishButton {
-  background-color: #3498db;
-  color: white;
+@media (max-width: 768px) {
+  .tabsSidebar {
+    display: none;
+  }
+
+  .filterDropdown {
+    display: block; /* Display the filterDropdown for medium screens */
+    margin-bottom: 10px;
+  }
 }
 
-.unpublishButton {
-  background-color: #f39c12;
-  color: white;
-}
-
-.draftButton {
-  margin-top: 5px;
-}
-
-.deleteButton:hover,
-.publishButton:hover,
-.unpublishButton:hover {
-  opacity: 0.9;
-}
-
-.deleteButton,
-.publishButton,
-.unpublishButton {
-  margin-top: 5px;
-}
-
-.listButtons {
-  text-align: right;
-}
-.rating {
-  display: flex;
-  align-items: center;
-  margin-left: auto;
-}
-
-.stars {
-  display: flex;
-  flex-direction: row;
-}
-.rateauthor {
-  display: flex;
-  justify-content: end;
-}
-.star:hover {
-  color: gold;
-}
-
-.averageRating {
-  margin-left: 5px;
-}
-
-.starsHome {
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 3px;
+@media (min-width: 768px) {
+  .filterDropdown {
+    display: none; /* Display the filterDropdown for medium screens */
+    margin-bottom: 10px;
+  }
 }

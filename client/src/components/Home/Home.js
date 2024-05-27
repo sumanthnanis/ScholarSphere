@@ -6,6 +6,7 @@ import PaperList from "../Paper/Paper";
 import { Toaster } from "sonner";
 import Navbar from "../Navbar/Navbar";
 import BookmarksContext from "../../BookmarksContext";
+import ToggleDropdown from "../Dropdown/ToggleDropdown";
 import { useDispatch, useSelector } from "react-redux";
 import {
   toggleBookmark,
@@ -26,12 +27,27 @@ const Home = () => {
   const [profiles, setProfiles] = useState([]);
   const [role, setRole] = useState("");
   const dispatch = useDispatch();
+  const [activeTab, setActiveTab] = useState("papers");
   const data = useSelector((prev) => prev.auth.user);
   const [displayedPapers, setDisplayedPapers] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [selectedPaper, setSelectedPaper] = useState(null);
   const [copySuccess, setCopySuccess] = useState(false);
   const papersPerLoad = 10;
+  const handleFilterChange = (filter) => {
+    switch (filter) {
+      case "Papers":
+        setActiveTab("papers");
+        break;
+      case "Authors":
+        setActiveTab("authors");
+        break;
+
+      default:
+        setActiveTab("papers" && "authors");
+    }
+  };
+
   useEffect(() => {
     fetchProfilesWithRatings();
   }, []);
@@ -245,7 +261,28 @@ const Home = () => {
           />
         </div>
         <div className={styles.page}>
-          <div className={styles.outputDivWrapper}>
+          <div className={styles.tabsSidebar}>
+            <div
+              className={`${styles.tabLink} ${
+                activeTab === "all" ? styles.active : ""
+              }`}
+              onClick={() => setActiveTab("papers")}
+            >
+              Papers
+            </div>
+            <div
+              className={`${styles.tabLink} ${
+                activeTab === "authors" ? styles.active : ""
+              }`}
+              onClick={() => setActiveTab("authors")}
+            >
+              Authors
+            </div>
+          </div>
+          <div className={styles.filterDropdown}>
+            <ToggleDropdown onFilterChange={handleFilterChange} />
+          </div>
+          {activeTab === "papers" && (
             <div className={styles.outputDiv}>
               <div className={styles.paperheader}>
                 {searchQuery ? (
@@ -264,99 +301,104 @@ const Home = () => {
                   </div>
                 )}
               </div>
-              <PaperList
-                papers={displayedPapers}
-                bookmarks={displayedPapers.map((paper) =>
-                  bookmarkedPapers.some((bp) => bp._id === paper._id)
-                )}
-                toggleBookmark={(index, id) =>
-                  toggleBookmark(
-                    index,
-                    id,
-                    displayedPapers,
+              <div>
+                <PaperList
+                  papers={displayedPapers}
+                  bookmarks={displayedPapers.map((paper) =>
+                    bookmarkedPapers.some((bp) => bp._id === paper._id)
+                  )}
+                  toggleBookmark={(index, id) =>
+                    toggleBookmark(
+                      index,
+                      id,
+                      displayedPapers,
 
-                    bookmarkedPapers,
+                      bookmarkedPapers,
 
-                    setPapers,
-                    setBookmarkedPapers,
-                    data.username
-                  )
-                }
-                showPdf={showPdf}
-                handleCitePopup={(paper) =>
-                  handleCitePopup(paper, setSelectedPaper, setShowPopup)
-                }
-              />
+                      setPapers,
+                      setBookmarkedPapers,
+                      data.username
+                    )
+                  }
+                  showPdf={showPdf}
+                  handleCitePopup={(paper) =>
+                    handleCitePopup(paper, setSelectedPaper, setShowPopup)
+                  }
+                />
+              </div>
             </div>
-          </div>
-          <div className={styles.total}>
-            {filteredProfiles.length > 0 && (
-              <div className={styles.authorDiv}>
+          )}
+
+          {activeTab === "authors" && (
+            <div className={styles.total}>
+              {filteredProfiles.length > 0 && (
                 <div className={styles.headin}>
                   {searchQuery
                     ? `Search Results for ${searchQuery} in Authors`
                     : "Top Authors"}
                 </div>
-              </div>
-            )}
-            {filteredProfiles.map((profile, index) => (
-              <NavLink
-                key={index}
-                className={styles.authorCard}
-                to={`/user/${encodeURIComponent(profile.username)}`}
-              >
-                <div className={styles.card}>
-                  <div className={styles.profileContainer}>
-                    <div className={styles.imageContainer}>
-                      {profile.profileImage && (
-                        <img
-                          src={`http://localhost:8000${profile.profileImage}`}
-                          alt={profile.username}
-                          className={styles.profileImage}
-                        />
-                      )}
-                    </div>
-                    <div className={styles.detailsOverlay}>
-                      <div className={styles.userInfo}>
-                        <h4 className={styles.userName}>
-                          {profile.username}{" "}
-                          <span className={styles.statLabel}>
-                            ({profile.averageRating})
-                          </span>
-                        </h4>
-
-                        <p className={styles.userInstitution}>
-                          {profile.institution}
-                        </p>
+              )}
+              {filteredProfiles.map((profile, index) => (
+                <NavLink
+                  key={index}
+                  className={styles.authorCard}
+                  to={`/user/${encodeURIComponent(profile.username)}`}
+                >
+                  <div className={styles.card}>
+                    <div className={styles.profileContainer}>
+                      <div className={styles.imageContainer}>
+                        {profile.profileImage && (
+                          <img
+                            src={`http://localhost:8000${profile.profileImage}`}
+                            alt={profile.username}
+                            className={styles.profileImage}
+                          />
+                        )}
                       </div>
-                      <div className={styles.stats}>
-                        <div className={styles.statItem}>
-                          <span className={styles.statNumber}>
-                            {profile.totalPapers}
-                          </span>
-                          <span className={styles.statLabel}>Publications</span>
+                      <div className={styles.detailsOverlay}>
+                        <div className={styles.userInfo}>
+                          <h4 className={styles.userName}>
+                            {profile.username}{" "}
+                            <span className={styles.statLabel}>
+                              ({profile.averageRating})
+                            </span>
+                          </h4>
+
+                          <p className={styles.userInstitution}>
+                            {profile.institution}
+                          </p>
                         </div>
-                        <div className={styles.statDivider}></div>
-                        <div className={styles.statItem}>
-                          <span className={styles.statNumber}>
-                            {profile.totalCitations}
-                          </span>
-                          <span className={styles.statLabel}>Citations</span>
-                        </div>
-                        <div className={styles.statDivider}></div>
-                        <div className={styles.statItem}>
-                          <span className={styles.statNumber}>
-                            {profile.totalReads}
-                          </span>
-                          <span className={styles.statLabel}>Reads</span>
+                        <div className={styles.stats}>
+                          <div className={styles.statItem}>
+                            <span className={styles.statNumber}>
+                              {profile.totalPapers}
+                            </span>
+                            <span className={styles.statLabel}>
+                              Publications
+                            </span>
+                          </div>
+                          <div className={styles.statDivider}></div>
+                          <div className={styles.statItem}>
+                            <span className={styles.statNumber}>
+                              {profile.totalCitations}
+                            </span>
+                            <span className={styles.statLabel}>Citations</span>
+                          </div>
+                          <div className={styles.statDivider}></div>
+                          <div className={styles.statItem}>
+                            <span className={styles.statNumber}>
+                              {profile.totalReads}
+                            </span>
+                            <span className={styles.statLabel}>Reads</span>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </NavLink>
-            ))}
-          </div>
+                </NavLink>
+              ))}
+            </div>
+          )}
         </div>
         {showPopup && selectedPaper && (
           <div className={styles.popup}>
