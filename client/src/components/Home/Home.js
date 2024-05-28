@@ -13,7 +13,6 @@ import {
   handleCitePopup,
   handleClosePopup,
   fetchProfiles,
-  handleCiteThisPaper,
   handleCopyCitation,
 } from "../../utils/util";
 import AuthorList from "./AuthorList";
@@ -33,7 +32,7 @@ const Home = ({ getNavigatoin }) => {
 
   const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState(
-    window.innerWidth < 768 ? "papers" : "all"
+    window.innerWidth < 810 ? "papers" : "all"
   );
 
   const data = useSelector((prev) => prev.auth.user);
@@ -59,7 +58,7 @@ const Home = ({ getNavigatoin }) => {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 768) {
+      if (window.innerWidth < 810) {
         setActiveTab("papers");
       } else {
         setActiveTab("all");
@@ -95,71 +94,29 @@ const Home = ({ getNavigatoin }) => {
     loadInitialPapers();
   }, [papers]);
 
-  const fetchPapers = async (profilesData = profiles) => {
+  const fetchPapers = async () => {
     try {
-      let url = "http://localhost:8000/api/get-papers";
+      const url = "http://localhost:8000/api/get-papers";
       const params = new URLSearchParams();
       params.append("sortBy", "publicationDate");
       params.append("order", "desc");
 
-      if (sortBy === "mostViewed") {
-        params.append("sortBy", "viewCount");
-      }
-      if (sortBy === "mostCited") {
-        params.append("sortBy", "citationCount");
-      }
-
       if (category) {
         params.append("category", category.trim());
       }
-      if (params.toString()) {
-        url += `?${params.toString()}`;
+
+      const response = await axios.get(url + `?${params.toString()}`);
+      let papersData = response.data;
+
+      if (sortBy === "mostViewed") {
+        papersData.sort((a, b) => b.count - a.count);
       }
-      const response = await axios.get(url);
-      const papersData = response.data;
 
-      const userProfile = profiles.find(
-        (profile) => profile.username === data.username
-      );
-      console.log(profiles);
-      const userSkillsString = userProfile
-        ? userProfile.skills.toLowerCase()
-        : "";
-      const userSkills = userSkillsString ? userSkillsString.split(",") : [];
+      if (sortBy === "mostCited") {
+        papersData.sort((a, b) => b.citations - a.citations);
+      }
 
-      const matchedPapers = papersData.filter((paper) => {
-        const paperCategories = paper.categories.map((category) =>
-          category.toLowerCase()
-        );
-        return (
-          userSkills &&
-          userSkills.some((skill) => paperCategories.includes(skill))
-        );
-      });
-
-      matchedPapers.sort(
-        (a, b) => new Date(b.publicationDate) - new Date(a.publicationDate)
-      );
-
-      const unmatchedPapers = papersData.filter((paper) => {
-        const paperCategories = paper.categories.map((category) =>
-          category.toLowerCase()
-        );
-        return (
-          !userSkills ||
-          !userSkills.some((skill) => paperCategories.includes(skill))
-        );
-      });
-
-      unmatchedPapers.sort(
-        (a, b) => new Date(b.publicationDate) - new Date(a.publicationDate)
-      );
-
-      // setPapers([...matchedPapers, ...unmatchedPapers]);
       setPapers(papersData);
-      setBookmarkedPapers(
-        papersData.filter((paper) => paper.bookmarkedBy.includes(data.username))
-      );
     } catch (error) {
       console.error("Error fetching papers:", error);
     }

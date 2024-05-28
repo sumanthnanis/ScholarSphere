@@ -8,9 +8,12 @@
 .outputDiv {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 .tabLink {
   display: none;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .heading {
@@ -45,6 +48,8 @@
 }
 .paperHeader {
   display: flex;
+  justify-content: space-between;
+  margin-right: 20px;
 }
 
 .popup {
@@ -102,6 +107,9 @@
 }
 .dropdownToggle {
   position: relative;
+
+  /* font-size: 18px;
+  font-weight: 550; */
 }
 
 .dropdownToggle .filterDropdown,

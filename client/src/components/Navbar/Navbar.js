@@ -10,10 +10,8 @@ import { useDispatch, useSelector } from "react-redux";
 function Navbar({
   user,
 
-  setCategory,
   handleChange = null,
   searchQuery = null,
-  hideCategoriesFilter = false,
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
@@ -84,15 +82,16 @@ function Navbar({
       </div>
       <div id={styles.navPart2}>
         <ul className={menuOpen ? styles.open : ""} id={styles.ul}>
-          {(data.role === "user" || data.role === "author") && (
-            <Search
-              authors={authors}
-              setAuthors={setAuthors}
-              className={styles.search}
-              handleChange={handleChange}
-              searchQuery={searchQuery}
-            />
-          )}
+          {(data.role === "user" || data.role === "author") &&
+            !isMediumScreen && (
+              <Search
+                authors={authors}
+                setAuthors={setAuthors}
+                className={styles.search}
+                handleChange={handleChange}
+                searchQuery={searchQuery}
+              />
+            )}
 
           {(data.role === "user" || data.role === "author") && (
             <>

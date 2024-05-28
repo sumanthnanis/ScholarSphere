@@ -19,8 +19,7 @@ const Filterdropdownn = ({ onFilterChange }) => {
   return (
     <div className="dropdownn">
       <div className="dropdownn-btn" onClick={() => setIsOpen(!isOpen)}>
-        Filter by content type:{" "}
-        <span className="dropdownnName">Research Papers</span>{" "}
+        <span className="dropdownnName"> Papers</span>{" "}
         <i className={isOpen ? "fa fa-caret-up" : "fa fa-caret-down"} />
       </div>
       {isOpen && (
