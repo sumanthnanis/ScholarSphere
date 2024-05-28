@@ -19,7 +19,6 @@ const PaperList = ({
   showButtons,
   showBookmark = true,
 }) => {
-  const [paper, setPaper] = useState([]);
   const [profiles, setProfiles] = useState([]);
   const [existingRatings, setExistingRatings] = useState({});
   const state = useSelector((prev) => prev.auth.user);
@@ -37,26 +36,6 @@ const PaperList = ({
 
     fetchProfileData();
   }, []);
-
-  // useEffect(() => {
-  //   if (searchQuery === "") {
-  //   } else {
-  //     const getPapersBySearch = async () => {
-  //       try {
-  //         const response = await axios.get(
-  //           `http://localhost:8000/api/search?search=${searchQuery}`
-  //         );
-  //         const { papers } = response.data;
-
-  //         setPaper(papers);
-  //       } catch (error) {
-  //         console.error("Error fetching papers:", error);
-  //       }
-  //     };
-
-  //     getPapersBySearch();
-  //   }
-  // }, [searchQuery]);
 
   useEffect(() => {
     const fetchRatings = async () => {
@@ -152,7 +131,7 @@ const PaperList = ({
   };
 
   return (
-    <div>
+    <div className={styles.paperrdiv}>
       {papers.map(
         (data, index) =>
           data && (

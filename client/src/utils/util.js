@@ -30,10 +30,8 @@ export const toggleBookmark = async (
       const updatedPaper = response.data.paper;
 
       const updatedPapers = Array.isArray(papers)
-        ? // If papers is an array, map over it and update the relevant paper
-          papers.map((p) => (p._id === updatedPaper._id ? updatedPaper : p))
-        : // If papers is a single paper, return the updated paper directly
-          updatedPaper;
+        ? papers.map((p) => (p._id === updatedPaper._id ? updatedPaper : p))
+        : updatedPaper;
 
       setPapers(updatedPapers);
 
@@ -54,16 +52,30 @@ export const toggleBookmark = async (
   }
 };
 
-export const showPdf = async (fileName) => {
-  const url = `http://localhost:8000/files/${fileName}`;
-
+export const showPdf = async (fileName, setPapers, papers) => {
   try {
+    // Increment the count in the database
+    await axios.post(`http://localhost:8000/api/increase-count/${fileName}`);
+
+    const url = `http://localhost:8000/files/${fileName}`;
     const response = await axios.get(url, {
       responseType: "blob",
     });
+
     const file = new Blob([response.data], { type: "application/pdf" });
     const fileURL = URL.createObjectURL(file);
     window.open(fileURL);
+
+    // Find the paper in the local state and update its count
+    const updatedPapers = papers.map((paper) => {
+      if (paper.pdf === fileName) {
+        return { ...paper, count: paper.count + 1 };
+      }
+      return paper;
+    });
+
+    // Update the papers state in the Home component
+    setPapers(updatedPapers);
   } catch (error) {
     console.error("Error fetching PDF:", error);
   }
@@ -147,3 +159,25 @@ export const fetchPapers = async (setPapers) => {
   }
 };
 // apiUtils.js
+export const handleCopyCitation = async (
+  paper,
+  setPapers,
+  setIndividualCopySuccess,
+  papers
+) => {
+  try {
+    await handleCiteThisPaper(
+      paper,
+      setPapers,
+      (value) => {
+        setIndividualCopySuccess((prev) => ({
+          ...prev,
+          [paper._id]: value,
+        }));
+      },
+      papers
+    );
+  } catch (error) {
+    console.error("Error copying citation:", error);
+  }
+};

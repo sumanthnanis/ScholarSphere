@@ -114,6 +114,13 @@ h5 {
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+@media (max-width: 900px) {
+  .paperdetails {
+    margin: 0px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+  }
+}
 .paperdescription {
   width: 70%;
   font-size: 16px;

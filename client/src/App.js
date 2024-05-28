@@ -34,7 +34,10 @@ function App() {
                 />
               }
             />
-            <Route path="/home" element={<Home />} />
+            <Route
+              path="/home"
+              element={<Home getNavigatoin={() => setState(true)} />}
+            />
             <Route
               path="/upload"
               element={

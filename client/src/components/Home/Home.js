@@ -3,7 +3,7 @@ import axios from "axios";
 import styles from "./Home.module.css";
 import PaperList from "../Paper/Paper";
 import { Toaster } from "sonner";
-import Navbar from "../Navbar/Navbar";
+
 import BookmarksContext from "../../BookmarksContext";
 import ToggleDropdown from "../Dropdown/ToggleDropdown";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,10 +14,12 @@ import {
   handleClosePopup,
   fetchProfiles,
   handleCiteThisPaper,
+  handleCopyCitation,
 } from "../../utils/util";
 import AuthorList from "./AuthorList";
 
-const Home = () => {
+const Home = ({ getNavigatoin }) => {
+  getNavigatoin();
   const { bookmarkedPapers, setBookmarkedPapers } =
     useContext(BookmarksContext);
   const [papers, setPapers] = useState([]);
@@ -33,6 +35,7 @@ const Home = () => {
   const [activeTab, setActiveTab] = useState(
     window.innerWidth < 768 ? "papers" : "all"
   );
+
   const data = useSelector((prev) => prev.auth.user);
   const [displayedPapers, setDisplayedPapers] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
@@ -114,7 +117,7 @@ const Home = () => {
       }
       const response = await axios.get(url);
       const papersData = response.data;
-      console.log("hiiiiiiiiiii", papersData);
+
       const userProfile = profiles.find(
         (profile) => profile.username === data.username
       );
@@ -208,7 +211,7 @@ const Home = () => {
         profile.username.toLowerCase().includes(searchQuery.toLowerCase())
       )
     : sortedProfiles;
-  console.log("these are the papers", papers);
+
   const fetchProfilesWithRatings = async () => {
     try {
       const profileData = await fetchProfiles();
@@ -227,23 +230,6 @@ const Home = () => {
     }
   };
 
-  const handleCopyCitation = async (paper) => {
-    try {
-      await handleCiteThisPaper(
-        paper,
-        setPapers,
-        (value) => {
-          setIndividualCopySuccess((prev) => ({
-            ...prev,
-            [paper._id]: value,
-          }));
-        },
-        papers
-      );
-    } catch (error) {
-      console.error("Error copying citation:", error);
-    }
-  };
   const toggleDropdown = (dropdown) => {
     setActiveDropdown(activeDropdown === dropdown ? null : dropdown);
   };
@@ -274,107 +260,111 @@ const Home = () => {
     <>
       <Toaster richColors position="top-right" />
       <div className={styles["home-root"]}>
-        <div className={styles["nav-div"]}></div>
         <div className={styles.filterDropdown}>
           <ToggleDropdown onFilterChange={handleFilterChange} />
         </div>
         <div className={styles.page}>
           {(activeTab === "all" || activeTab === "papers") && (
             <>
-              <div className={styles.pagemerger}>
-                <div className={styles.outputDiv}>
-                  <div className={styles.paperHeader}>
-                    {searchQuery ? (
-                      <div className={styles.heading}>
-                        Search Results for {searchQuery} in Papers
-                      </div>
-                    ) : category ? (
-                      <div className={styles.heading}>
-                        Showing Papers On {category}
-                      </div>
-                    ) : (
-                      <div className={styles.heading}>
-                        Researches based on your interests
-                      </div>
-                    )}
-
-                    <div
-                      className={`${styles.navLinkss} ${styles.dropdownToggle}`}
-                      onClick={() => toggleDropdown("filter")}
-                    >
-                      Filter <i className="fas fa-caret-down" />
-                      {activeDropdown === "filter" && (
-                        <ul className={styles.filterDropdown}>
-                          <li
-                            className={styles.filterItem}
-                            onClick={handleMostViewedClick}
-                          >
-                            Most Viewed
-                          </li>
-                          <li
-                            className={styles.filterItem}
-                            onClick={handleMostCitedClick}
-                          >
-                            Most Cited
-                          </li>
-                        </ul>
-                      )}
+              <div className={styles.outputDiv}>
+                <div className={styles.paperHeader}>
+                  {searchQuery ? (
+                    <div className={styles.heading}>
+                      Search Results for {searchQuery} in Papers
                     </div>
-                  </div>
-                  <PaperList
-                    papers={displayedPapers}
-                    bookmarks={displayedPapers.map((paper) =>
-                      bookmarkedPapers.some((bp) => bp._id === paper._id)
+                  ) : category ? (
+                    <div className={styles.heading}>
+                      Showing Papers On {category}
+                    </div>
+                  ) : (
+                    <div className={styles.heading}>
+                      Researches based on your interests
+                    </div>
+                  )}
+
+                  <div
+                    className={`${styles.navLinkss} ${styles.dropdownToggle}`}
+                    onClick={() => toggleDropdown("filter")}
+                  >
+                    Filter <i className="fas fa-caret-down" />
+                    {activeDropdown === "filter" && (
+                      <ul className={styles.filterDropdown}>
+                        <li
+                          className={styles.filterItem}
+                          onClick={handleMostViewedClick}
+                        >
+                          Most Viewed
+                        </li>
+                        <li
+                          className={styles.filterItem}
+                          onClick={handleMostCitedClick}
+                        >
+                          Most Cited
+                        </li>
+                      </ul>
                     )}
-                    toggleBookmark={(index, id) =>
-                      toggleBookmark(
-                        index,
-                        id,
-                        displayedPapers,
-                        bookmarkedPapers,
-                        setPapers,
-                        setBookmarkedPapers,
-                        data.username
-                      )
-                    }
-                    showPdf={showPdf}
-                    handleCitePopup={(paper) =>
-                      handleCitePopup(paper, setSelectedPaper, setShowPopup)
-                    }
-                    handleCopyCitation={handleCopyCitation}
-                    individualCopySuccess={individualCopySuccess}
-                  />
+                  </div>
                 </div>
-                {(activeTab === "authors" || activeTab === "all") && (
-                  <AuthorList
-                    profiles={filteredProfiles}
-                    searchQuery={searchQuery}
-                  />
-                )}
+                <PaperList
+                  papers={displayedPapers}
+                  bookmarks={displayedPapers.map((paper) =>
+                    bookmarkedPapers.some((bp) => bp._id === paper._id)
+                  )}
+                  toggleBookmark={(index, id) =>
+                    toggleBookmark(
+                      index,
+                      id,
+                      displayedPapers,
+                      bookmarkedPapers,
+                      setPapers,
+                      setBookmarkedPapers,
+                      data.username
+                    )
+                  }
+                  showPdf={(fileName) => showPdf(fileName, setPapers, papers)}
+                  handleCitePopup={(paper) =>
+                    handleCitePopup(paper, setSelectedPaper, setShowPopup)
+                  }
+                  handleCopyCitation={(paper) =>
+                    handleCopyCitation(
+                      paper,
+                      setPapers,
+                      setIndividualCopySuccess,
+                      papers
+                    )
+                  }
+                  individualCopySuccess={individualCopySuccess}
+                />
               </div>
+              {(activeTab === "authors" || activeTab === "all") && (
+                <AuthorList
+                  profiles={filteredProfiles}
+                  searchQuery={searchQuery}
+                />
+              )}
             </>
           )}
           {activeTab === "authors" && (
             <AuthorList profiles={filteredProfiles} searchQuery={searchQuery} />
           )}
         </div>
-        <div className={styles.tabsSidebar}>
-          <div
-            className={`${styles.tabLink} ${
-              activeTab === "papers" ? styles.active : ""
-            }`}
-            onClick={() => setActiveTab("papers")}
-          >
-            Papers
-          </div>
-          <div
-            className={`${styles.tabLink} ${
-              activeTab === "authors" ? styles.active : ""
-            }`}
-            onClick={() => setActiveTab("authors")}
-          >
-            Authors
-          </div>
+      </div>
+      <div className={styles.tabsSidebar}>
+        <div
+          className={`${styles.tabLink} ${
+            activeTab === "papers" ? styles.active : ""
+          }`}
+          onClick={() => setActiveTab("papers")}
+        >
+          Papers
+        </div>
+        <div
+          className={`${styles.tabLink} ${
+            activeTab === "authors" ? styles.active : ""
+          }`}
+          onClick={() => setActiveTab("authors")}
+        >
+          Authors
         </div>
       </div>
       {showPopup && selectedPaper && (

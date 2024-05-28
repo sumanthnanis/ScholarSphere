@@ -22,7 +22,7 @@
 .headin {
   font-size: 18.52px;
   font-weight: 550;
-  margin-top: 5px;
+  margin-top: 15px;
   margin-bottom: 10px;
 }
 .card {
@@ -122,7 +122,11 @@
   font-size: 20px;
   cursor: pointer;
 }
-
+@media (max-width: 900px) {
+  .close {
+    left: 50vw;
+  }
+}
 .close:hover {
   color: red;
 }
@@ -159,17 +163,6 @@
   margin-top: 5px;
 }
 
-.home-root {
-  position: relative;
-}
-.nav-div {
-  position: sticky;
-  top: 0;
-  width: 100%;
-  height: auto;
-  z-index: 100;
-  background-color: white;
-}
 .total {
   width: 43%;
   margin-right: 20px;
@@ -259,11 +252,6 @@
   color: #666;
 }
 /* Default desktop view */
-.total {
-  display: block;
-  /* padding-left: 10px; */
-  margin-top: 10px;
-}
 
 .toggle-dropdown {
   display: none;

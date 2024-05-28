@@ -6,6 +6,16 @@
 
   margin-top: 5px;
 }
+@media (max-width: 1170px) {
+  .searchContainer {
+    left: 13vw;
+  }
+}
+@media (max-width: 1065px) {
+  .searchContainer {
+    left: 17vw;
+  }
+}
 
 .searchBar {
   display: flex;

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import PaperList from "../Paper/Paper";
-
 import axios from "axios";
 import { Toaster, toast } from "sonner";
 import styles from "./AuthorPapers.module.css";
 import FilterDropdown from "../Dropdown/FilterDropdown";
 import { useDispatch, useSelector } from "react-redux";
+import { showPdf, handleCitePopup, handleCopyCitation } from "../../utils/util";
 
 const AuthorPapers = () => {
   const [draft0Papers, setDraft0Papers] = useState([]);
@@ -13,6 +13,10 @@ const AuthorPapers = () => {
   const [activeTab, setActiveTab] = useState("all");
   const dispatch = useDispatch();
   const data = useSelector((prev) => prev.auth.user);
+  const [showPopup, setShowPopup] = useState(false);
+  const [selectedPaper, setSelectedPaper] = useState(null);
+  const [individualCopySuccess, setIndividualCopySuccess] = useState({});
+
   const handleFilterChange = (filter) => {
     switch (filter) {
       case "All":
@@ -139,8 +143,17 @@ const AuthorPapers = () => {
                 papers={allPapers}
                 bookmarks={[]}
                 toggleBookmark={() => {}}
-                showPdf={() => {}}
-                handleCitePopup={() => {}}
+                showPdf={showPdf}
+                handleCitePopup={(paper) =>
+                  handleCitePopup(paper, setSelectedPaper, setShowPopup)
+                }
+                handleCopyCitation={(paper) =>
+                  handleCopyCitation(
+                    paper,
+                    setIndividualCopySuccess,
+                    individualCopySuccess
+                  )
+                }
                 state={""}
                 showBookmark={false}
               />
@@ -153,10 +166,19 @@ const AuthorPapers = () => {
                 papers={draft0Papers}
                 bookmarks={[]}
                 toggleBookmark={() => {}}
-                showPdf={() => {}}
-                handleCitePopup={() => {}}
+                showPdf={showPdf}
+                handleCitePopup={(paper) =>
+                  handleCitePopup(paper, setSelectedPaper, setShowPopup)
+                }
+                handleCopyCitation={(paper) =>
+                  handleCopyCitation(
+                    paper,
+                    setIndividualCopySuccess,
+                    individualCopySuccess
+                  )
+                }
                 state={""}
-                handleDraft={handleDraft} // Pass handleDraft function as prop
+                handleDraft={handleDraft}
                 showButtons={true}
                 showBookmark={false}
               />
@@ -169,8 +191,17 @@ const AuthorPapers = () => {
                 papers={draft1Papers}
                 bookmarks={[]}
                 toggleBookmark={() => {}}
-                showPdf={() => {}}
-                handleCitePopup={() => {}}
+                showPdf={showPdf}
+                handleCitePopup={(paper) =>
+                  handleCitePopup(paper, setSelectedPaper, setShowPopup)
+                }
+                handleCopyCitation={(paper) =>
+                  handleCopyCitation(
+                    paper,
+                    setIndividualCopySuccess,
+                    individualCopySuccess
+                  )
+                }
                 state={""}
                 handleDelete={handleDelete}
                 handleDraft={handleDraft}
@@ -181,6 +212,37 @@ const AuthorPapers = () => {
           )}
         </div>
       </div>
+      {showPopup && selectedPaper && (
+        <div className={styles.popup}>
+          <div className={styles.popupContent}>
+            <span
+              className={styles.close}
+              onClick={() => {
+                setShowPopup(false);
+                setSelectedPaper(null);
+              }}
+            >
+              &times;
+            </span>
+            <h2 className={styles.citePaper}>Cite Paper</h2>
+            <p>
+              {selectedPaper.uploadedBy}. {selectedPaper.title}
+            </p>
+            <button
+              className={styles.copyButton}
+              onClick={() =>
+                handleCopyCitation(
+                  selectedPaper,
+                  setIndividualCopySuccess,
+                  individualCopySuccess
+                )
+              }
+            >
+              Copy Citation
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -23,7 +23,7 @@ function Navbar({
   const [isMediumScreen, setIsMediumScreen] = useState(
     window.innerWidth <= 992
   );
-  const [isFullScreen, setIsFullScreen] = useState(window.innerWidth > 992);
+  const [isFullScreen, setIsFullScreen] = useState(window.innerWidth > 1070);
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -31,8 +31,8 @@ function Navbar({
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMediumScreen(window.innerWidth <= 992);
-      setIsFullScreen(window.innerWidth > 992);
+      setIsMediumScreen(window.innerWidth <= 1070);
+      setIsFullScreen(window.innerWidth > 1070);
     };
 
     window.addEventListener("resize", handleResize);
@@ -84,17 +84,15 @@ function Navbar({
       </div>
       <div id={styles.navPart2}>
         <ul className={menuOpen ? styles.open : ""} id={styles.ul}>
-          {(data.role === "user" || data.role === "author") &&
-            !hideCategoriesFilter &&
-            !isMediumScreen && (
-              <Search
-                authors={authors}
-                setAuthors={setAuthors}
-                className={styles.search}
-                handleChange={handleChange}
-                searchQuery={searchQuery}
-              />
-            )}
+          {(data.role === "user" || data.role === "author") && (
+            <Search
+              authors={authors}
+              setAuthors={setAuthors}
+              className={styles.search}
+              handleChange={handleChange}
+              searchQuery={searchQuery}
+            />
+          )}
 
           {(data.role === "user" || data.role === "author") && (
             <>

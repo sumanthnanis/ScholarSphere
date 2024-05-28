@@ -12,30 +12,11 @@ const storage = multer.diskStorage({
     cb(null, "./files");
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + "-" + file.originalname);
+    cb(null, Date.now() + file.originalname);
   },
 });
 
 const upload = multer({ storage: storage });
-
-const incrementCount = async (path) => {
-  try {
-    const decodedPath = decodeURIComponent(path);
-
-    const filename = decodedPath.substring(1);
-
-    let file = await Paper.findOne({ pdf: filename });
-
-    if (file) {
-      file.count++;
-      await file.save();
-    } else {
-      console.log("File not found in database");
-    }
-  } catch (err) {
-    console.error("Error incrementing count:", err);
-  }
-};
 
 router.use(
   "/files",
@@ -46,6 +27,25 @@ router.use(
   },
   express.static(path.join(__dirname, "../files"))
 );
+router.post("/increase-count/:filename", async (req, res) => {
+  const { filename } = req.params;
+
+  try {
+    const paper = await Paper.findOne({ pdf: filename });
+
+    if (!paper) {
+      return res.status(404).json({ error: "Paper not found" });
+    }
+
+    paper.count += 1;
+    await paper.save();
+
+    res.status(200).json({ message: "Count increased successfully" });
+  } catch (error) {
+    console.error("Error increasing count:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 
 router.post("/upload", upload.single("file"), async (req, res) => {
   const { title, description, username, categories, draft, paperType } =
@@ -55,7 +55,8 @@ router.post("/upload", upload.single("file"), async (req, res) => {
     const newPaper = new Paper({
       title,
       description,
-      pdf: req.file.path,
+      // Adjusting the file path to remove "files/" prefix
+      pdf: req.file.path.substring(6), // Assuming "files/" is 6 characters long
       uploadedBy: username,
       count: 0,
       citations: 0,
@@ -69,7 +70,7 @@ router.post("/upload", upload.single("file"), async (req, res) => {
     });
 
     await newPaper.save();
-    res.status(201).json({ message: "File uploaded successfully" });
+    res.status(200).json({ message: "File uploaded successfully" });
   } catch (error) {
     console.error("Error uploading file:", error);
     res.status(500).json({ error: "Failed to upload file" });
