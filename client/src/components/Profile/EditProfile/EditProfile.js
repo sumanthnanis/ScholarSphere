@@ -144,14 +144,16 @@ const EditProfile = ({ initialActiveTab }) => {
                   >
                     Professional Profile
                   </a>
-                  <a
-                    className={`list-group-item ${
-                      activeTab === "research-papers" ? "active" : ""
-                    }`}
-                    onClick={() => setActiveTab("research-papers")}
-                  >
-                    Research papers
-                  </a>
+                  {data.role === "author" && (
+                    <a
+                      className={`list-group-item ${
+                        activeTab === "research-papers" ? "active" : ""
+                      }`}
+                      onClick={() => setActiveTab("research-papers")}
+                    >
+                      Research papers
+                    </a>
+                  )}
                   <a
                     className={`list-group-item ${
                       activeTab === "my-list" ? "active" : ""
@@ -327,14 +329,16 @@ const EditProfile = ({ initialActiveTab }) => {
                       </div>
                     </div>
                   </div>
-                  <div
-                    className={`tab-pane ${
-                      activeTab === "research-papers" ? "active" : ""
-                    }`}
-                    id="research-papers"
-                  >
-                    <AuthorPapers />
-                  </div>
+                  {data.role === "author" && (
+                    <div
+                      className={`tab-pane ${
+                        activeTab === "research-papers" ? "active" : ""
+                      }`}
+                      id="research-papers"
+                    >
+                      <AuthorPapers />
+                    </div>
+                  )}
                   <div
                     className={`tab-pane ${
                       activeTab === "my-list" ? "active" : ""

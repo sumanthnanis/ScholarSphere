@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 function Navbar({
   user,
-  setSortBy,
+
   setCategory,
   handleChange = null,
   searchQuery = null,
@@ -17,7 +17,7 @@ function Navbar({
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
-  const [activeDropdow, setActiveDropdow] = useState(null);
+
   const [isOpen, setIsOpen] = useState(false);
   const [authors, setAuthors] = useState([]);
   const [isMediumScreen, setIsMediumScreen] = useState(
@@ -49,26 +49,13 @@ function Navbar({
     window.location.href = "/";
   };
 
-  const handleMostViewedClick = () => {
-    setSortBy("mostViewed");
-    closeMobileMenu();
-  };
-
-  const handleMostCitedClick = () => {
-    setSortBy("mostCited");
-    closeMobileMenu();
-  };
-
   const handleCategoryClick = (category) => {
-    setCategory(category);
+    navigate(`/category/${category}`);
     closeMobileMenu();
   };
 
   const toggleDropdown = (dropdown) => {
     setActiveDropdown(activeDropdown === dropdown ? null : dropdown);
-  };
-  const toggleDropdow = (dropdown) => {
-    setActiveDropdow(activeDropdow === dropdown ? null : dropdown);
   };
 
   const handleMyPapersClick = () => {
@@ -86,7 +73,9 @@ function Navbar({
   return (
     <nav id={styles.nav}>
       <div className={styles.logocontainer}>
-        <img className={styles.logo} src={logo} alt="logo" />
+        <NavLink to="/home">
+          <img className={styles.logo} src={logo} alt="logo" />
+        </NavLink>
       </div>
       <div className={styles.menu} onClick={handleClick}>
         <span></span>
@@ -106,13 +95,6 @@ function Navbar({
                 searchQuery={searchQuery}
               />
             )}
-          {
-            <li className={styles.navLinks}>
-              <NavLink className={styles.linked} to="/home">
-                Home
-              </NavLink>
-            </li>
-          }
 
           {(data.role === "user" || data.role === "author") && (
             <>
@@ -127,28 +109,6 @@ function Navbar({
                     items={MenuItems}
                     handleCategoryClick={handleCategoryClick}
                   />
-                )}
-              </li>
-              <li
-                className={`${styles.navLinkss} ${styles.dropdownToggle}`}
-                onClick={() => toggleDropdow("filter")}
-              >
-                Filter <i className="fas fa-caret-down" />
-                {activeDropdow === "filter" && (
-                  <ul className={styles.filterDropdown}>
-                    <li
-                      className={styles.filterItem}
-                      onClick={handleMostViewedClick}
-                    >
-                      Most Viewed
-                    </li>
-                    <li
-                      className={styles.filterItem}
-                      onClick={handleMostCitedClick}
-                    >
-                      Most Cited
-                    </li>
-                  </ul>
                 )}
               </li>
             </>
@@ -173,7 +133,7 @@ function Navbar({
                       className={styles.linked}
                       state={user}
                     >
-                      Publish
+                      Add a paper
                     </NavLink>
                   </li>
                 )}

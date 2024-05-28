@@ -10,6 +10,7 @@ import Upload from "./components/Upload/Upload";
 import PaperPreview from "./components/PaperPreview/PaperPreview";
 import Author from "./components/AuthorPapers/Author";
 import Profile from "./components/Profile/Profile";
+import CategoryPage from "./components/category/category";
 import { BookmarksProvider } from "./BookmarksContext";
 import { store } from "./reducers/store";
 import { Provider } from "react-redux";
@@ -26,6 +27,7 @@ function App() {
             <Route path="/my-papers" element={<AuthorPapers />} />
             <Route path="/paper/:id" element={<PaperPreview />} />
             <Route path="/user/:authorName" element={<Author />} />
+            <Route path="/category/:category" element={<CategoryPage />} />
             <Route path="/user/profile" element={<Profile />} />
           </Routes>
         </BookmarksProvider>

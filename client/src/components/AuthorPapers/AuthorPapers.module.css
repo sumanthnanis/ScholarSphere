@@ -1,6 +1,6 @@
 .researchPapersTabs {
   display: flex;
-  height: 60vh; /* Make the container take the full height of the viewport */
+  height: 60vh;
 }
 
 .tabsSidebar {
@@ -22,12 +22,12 @@
 }
 
 .cardBody {
-  flex-grow: 1; /* Ensure the card body takes the remaining width */
+  flex-grow: 1;
   padding: 16px;
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 4px;
-  overflow-y: auto; /* Add scroll if content overflows */
+  overflow-y: auto;
 }
 
 .paperList {

@@ -172,6 +172,7 @@ router.get("/get-papers", async (req, res) => {
 
     if (req.query.sortBy === "viewCount") {
       const papers = await Paper.find({}).sort({ count: -1 });
+      console.log(papers.title);
       return res.send(papers);
     }
     if (req.query.sortBy === "citationCount") {
@@ -200,7 +201,6 @@ router.get("/get-papers", async (req, res) => {
 
     const papers = await Paper.find({ draft: 0 });
     res.send(papers);
-    console.log(papers);
   } catch (error) {
     console.error("Error fetching papers:", error);
     res.status(500).json({ status: "error" });

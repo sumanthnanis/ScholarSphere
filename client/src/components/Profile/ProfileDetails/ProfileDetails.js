@@ -66,16 +66,46 @@ const ProfileDetails = ({ authorname }) => {
     }
   };
 
+  const [hoverRating, setHoverRating] = useState(0);
+  const [clickedRating, setClickedRating] = useState(
+    parseInt(localStorage.getItem("clickedRating")) || authorRatings.userRating
+  );
+  const [initialRating, setInitialRating] = useState(
+    parseInt(localStorage.getItem("initialRating")) || authorRatings.userRating
+  );
+
+  const handleHover = (rating) => {
+    setHoverRating(rating);
+  };
+
+  const handleClick = (rating) => {
+    setClickedRating(rating);
+    setInitialRating(rating);
+    handleAuthorRatingChange(rating);
+    localStorage.setItem("clickedRating", rating);
+    localStorage.setItem("initialRating", rating);
+  };
+
   const renderStars = (ratingToDisplay, isAverage = false) => {
     return [1, 2, 3, 4, 5].map((star) => (
       <FaStar
         key={star}
-        className={styles.star}
-        color={star <= ratingToDisplay ? (isAverage ? "gold" : "violet") : "grey"}
-        onClick={() => !isAverage && handleAuthorRatingChange(star)}
+        className={`${styles.star} ${
+          star <= (hoverRating || clickedRating)
+            ? isAverage
+              ? styles.averageStar
+              : star <= initialRating
+              ? styles.ratedStar
+              : ""
+            : ""
+        } ${star <= hoverRating ? styles.hovered : ""}`}
+        onMouseEnter={() => handleHover(star)}
+        onMouseLeave={() => handleHover(0)}
+        onClick={() => handleClick(star)}
       />
     ));
   };
+  
 
   useEffect(() => {
     const fetchUsername = authorname || data.username;
@@ -117,6 +147,10 @@ const ProfileDetails = ({ authorname }) => {
       } catch (error) {
         console.error("Error fetching papers:", error);
       }
+      return() => {
+        localStorage.removeItem("clickedRating");
+        localStorage.removeItem("initialRating");
+      }
     };
 
     if (fetchUsername) {
@@ -155,11 +189,12 @@ const ProfileDetails = ({ authorname }) => {
           </div>
         </div>
 
+        
         {data.role === "author" && (
           <div className={styles.paperStats}>
-            <p>Publications: {paperStats.totalPapers}</p>
-            <p> Citations: {paperStats.totalCitations}</p>
-            <p> Reads: {paperStats.totalReads}</p>
+            <div>Publications: {paperStats.totalPapers}</div>
+            <div> Citations: {paperStats.totalCitations}</div>
+            <div> Reads: {paperStats.totalReads}</div>
           </div>
         )}
 
@@ -171,12 +206,10 @@ const ProfileDetails = ({ authorname }) => {
 
           <h4>Rating:&nbsp;</h4>
           <div className={styles.stars}>
-            {renderStars(authorRatings.userRating)}
-            <span>
-              (
-                {authorRatings.averageRating.toFixed(1)}
-              )
-            </span>
+          {renderStars(clickedRating)}
+          <span>(
+          {authorRatings.averageRating.toFixed(1)}
+          )</span>
           </div>
         </div>
       </div>

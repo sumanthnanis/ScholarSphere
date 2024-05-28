@@ -52,23 +52,7 @@
 .media {
   display: flex;
 }
-@media (max-width: 800px) {
-  .media {
-    flex-direction: column;
-  }
-  .paperStats {
-    display: flex;
-    flex-direction: row;
-    padding: 0px;
-    margin-left: 0px;
-  }
-  p {
-    margin-right: 10px;
-  }
-  .profileDetails {
-    margin: 0;
-  }
-}
+
 .profileCollege {
   font-size: 14px;
 
@@ -126,7 +110,7 @@
 .button:hover {
   background-color: #218838;
 }
-
+/* 
 .authorRating {
   display: flex;
   align-items: center;
@@ -152,4 +136,68 @@
 
 .averageRating {
   margin-left: 5px;
+} */
+
+/* ... */
+
+.stars {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.star {
+  margin-right: 5px;
+  cursor: pointer;
+  color: #ccc;
+}
+
+.star.hovered {
+  color: gold;
+}
+
+.star.ratedStar {
+  color: violet;
+}
+
+.star.averageStar {
+  color: gold;
+}
+
+.authorRating {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  position: absolute;
+  margin-top: 85px;
+  margin-left: 325px;
+}
+
+.authorRating h4 {
+  margin-right: 10px;
+}
+
+/* ... */
+
+@media (max-width: 800px) {
+  .media {
+    flex-direction: column;
+  }
+  .paperStats {
+    display: flex;
+    flex-direction: row;
+    padding: 0px;
+    margin-left: 0px;
+  }
+  p {
+    margin-right: 10px;
+  }
+  .profileDetails {
+    margin: 0;
+  }
+  .authorRating{
+    position: static;
+    margin-left: 0;
+    margin-top: 0px;
+  }
 }
