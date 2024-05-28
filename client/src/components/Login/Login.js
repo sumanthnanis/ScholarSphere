@@ -5,7 +5,7 @@ import register from "../Img/register.svg";
 import { useNavigate } from "react-router-dom";
 import { setUser } from "../../reducers/authSlice";
 import { useDispatch } from "react-redux";
-const Login = () => {
+const Login = ({ onRender, setLoginState }) => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -57,11 +57,13 @@ const Login = () => {
     if (data.token) {
       dispatch(setUser(data));
       navigate("/home");
+      setLoginState();
     } else {
       setMessage("Please check your email and password");
     }
   }
 
+  onRender();
   return (
     <div className={`container1 ${isSignUp ? "sign-up-mode" : ""}`}>
       <div className="forms-container1">

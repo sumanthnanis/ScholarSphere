@@ -100,12 +100,6 @@ const PaperPreview = () => {
     <div>
       <Toaster richColors position="top-right" />
 
-      <Navbar
-        setSortBy={setSortBy}
-        setCategory={setCategory}
-        handleChange={handleSearch}
-        searchQuery={searchQuery}
-      />
       <div className={styles.paperpreviewcontainer}>
         <div className={styles.paperdetails}>
           <div className={styles.uppercon}>

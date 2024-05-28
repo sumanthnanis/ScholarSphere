@@ -110,35 +110,6 @@
 .button:hover {
   background-color: #218838;
 }
-/* 
-.authorRating {
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
-}
-.rating {
-  display: flex;
-  align-items: center;
-  margin-left: auto;
-}
-
-.stars {
-  display: flex;
-  flex-direction: row;
-}
-.rateauthor {
-  display: flex;
-  justify-content: end;
-}
-.star:hover {
-  color: gold;
-}
-
-.averageRating {
-  margin-left: 5px;
-} */
-
-/* ... */
 
 .stars {
   display: flex;
@@ -195,7 +166,7 @@
   .profileDetails {
     margin: 0;
   }
-  .authorRating{
+  .authorRating {
     position: static;
     margin-left: 0;
     margin-top: 0px;

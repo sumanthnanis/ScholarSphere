@@ -7,9 +7,6 @@ const Profile = () => {
   return (
     <div>
       <div>
-        <Navbar />
-      </div>
-      <div>
         <ProfileDetails />
       </div>
       <div>

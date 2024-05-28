@@ -7,7 +7,8 @@ import "./Upload.css";
 import { useDispatch, useSelector } from "react-redux";
 import Navbar from "../Navbar/Navbar";
 
-const Upload = () => {
+const Upload = ({ exitPage, enterPage }) => {
+  enterPage();
   const [file, setFile] = useState(null);
   const [msg, setMsg] = useState(null);
   const dispatch = useDispatch();
@@ -90,6 +91,10 @@ const Upload = () => {
     } catch (error) {
       console.error("Error submitting file:", error);
     }
+  };
+
+  window.onpopstate = () => {
+    exitPage();
   };
 
   return (

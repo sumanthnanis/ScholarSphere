@@ -81,7 +81,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    fetchPapers(profiles);
+    fetchPapers();
   }, [category, sortBy]);
 
   useEffect(() => {
@@ -162,35 +162,6 @@ const Home = () => {
     }
   };
 
-  useEffect(() => {
-    const getPapersBySearch = async () => {
-      try {
-        if (searchQuery === "") {
-          await fetchPapers();
-          await fetchProfilesWithRatings();
-        } else {
-          const response = await axios.get(
-            `http://localhost:8000/api/search?search=${searchQuery}`
-          );
-          const { papers, profiles } = response.data;
-          setPapers(papers);
-          setProfiles(profiles);
-          setBookmarkedPapers(
-            papers.filter((paper) => paper.bookmarkedBy.includes(data.username))
-          );
-        }
-      } catch (error) {
-        console.error("Error fetching papers:", error);
-      }
-    };
-
-    getPapersBySearch();
-  }, [searchQuery]);
-
-  const handleSearch = (e) => {
-    setSearchQuery(e.target.value);
-  };
-
   const aggregatedProfiles = profiles
     .map((profile) => {
       const authorPapers = papers.filter(
@@ -237,7 +208,7 @@ const Home = () => {
         profile.username.toLowerCase().includes(searchQuery.toLowerCase())
       )
     : sortedProfiles;
-
+  console.log("these are the papers", papers);
   const fetchProfilesWithRatings = async () => {
     try {
       const profileData = await fetchProfiles();
@@ -303,13 +274,7 @@ const Home = () => {
     <>
       <Toaster richColors position="top-right" />
       <div className={styles["home-root"]}>
-        <div className={styles["nav-div"]}>
-          <Navbar
-            setCategory={setCategory}
-            handleChange={handleSearch}
-            searchQuery={searchQuery}
-          />
-        </div>
+        <div className={styles["nav-div"]}></div>
         <div className={styles.filterDropdown}>
           <ToggleDropdown onFilterChange={handleFilterChange} />
         </div>

@@ -48,7 +48,7 @@ const Author = () => {
   return (
     <div className={styles.outputDiv}>
       <Toaster richColors position="top-right" />
-      <Navbar hideCategoriesFilter={true} />
+
       <ProfileDetails authorname={authorName} />
       <PaperList
         papers={papers}

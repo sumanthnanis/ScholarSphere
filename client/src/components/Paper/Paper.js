@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
+import axios from "axios";
 import { FaBookmark, FaStar } from "react-icons/fa";
 import styles from "./paper.module.css";
 import logo from "../Img/myself.jpg";
@@ -10,6 +11,7 @@ const PaperList = ({
   papers,
   bookmarks,
   toggleBookmark,
+  searchQuery,
   showPdf,
   handleCitePopup,
   handleDelete,
@@ -17,11 +19,12 @@ const PaperList = ({
   showButtons,
   showBookmark = true,
 }) => {
+  const [paper, setPaper] = useState([]);
   const [profiles, setProfiles] = useState([]);
-
-  const dispatch = useDispatch();
-  const state = useSelector((prev) => prev.auth.user);
   const [existingRatings, setExistingRatings] = useState({});
+  const state = useSelector((prev) => prev.auth.user);
+  const dispatch = useDispatch();
+
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
@@ -34,6 +37,27 @@ const PaperList = ({
 
     fetchProfileData();
   }, []);
+
+  // useEffect(() => {
+  //   if (searchQuery === "") {
+  //   } else {
+  //     const getPapersBySearch = async () => {
+  //       try {
+  //         const response = await axios.get(
+  //           `http://localhost:8000/api/search?search=${searchQuery}`
+  //         );
+  //         const { papers } = response.data;
+
+  //         setPaper(papers);
+  //       } catch (error) {
+  //         console.error("Error fetching papers:", error);
+  //       }
+  //     };
+
+  //     getPapersBySearch();
+  //   }
+  // }, [searchQuery]);
+
   useEffect(() => {
     const fetchRatings = async () => {
       try {
@@ -74,7 +98,6 @@ const PaperList = ({
   const renderStars = (paperId) => {
     const { averageRating, userRating } = existingRatings[paperId] || {};
     const userHasRated = userRating !== null;
-
     const ratingToDisplay = userHasRated ? userRating : averageRating || 0;
 
     return [1, 2, 3, 4, 5].map((star) => (
@@ -127,6 +150,7 @@ const PaperList = ({
       console.error("Error submitting rating:", error);
     }
   };
+
   return (
     <div>
       {papers.map(

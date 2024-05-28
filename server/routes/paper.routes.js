@@ -258,8 +258,11 @@ router.delete("/papers/:paperId", async (req, res) => {
 });
 
 router.get("/search", async (req, res) => {
+  console.log("in search");
   let paperQuery = {};
+  console.log(req.query);
   const searchData = req.query.search;
+  console.log(searchData);
 
   try {
     if (searchData) {
@@ -273,6 +276,7 @@ router.get("/search", async (req, res) => {
     }
 
     const paperSearchPromise = Paper.find(paperQuery);
+    // console.log(paperSearchPromise);
 
     const profileSearchPromise = Profile.find({
       username: { $regex: searchData, $options: "i" },
@@ -299,6 +303,7 @@ router.get("/search", async (req, res) => {
     };
 
     res.send(response);
+    console.log(response);
   } catch (error) {
     console.log(error);
     res.status(500).send({ status: "error" });
