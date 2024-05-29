@@ -1,9 +1,8 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
 import "./Upload.css";
-import { Toaster } from "sonner";
-import { toast } from "sonner";
+import { Toaster, toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -11,6 +10,7 @@ const Upload = ({ exitPage, enterPage }) => {
   enterPage();
   const [file, setFile] = useState(null);
   const [msg, setMsg] = useState(null);
+  const [successMsg, setSuccessMsg] = useState(null);
 
   const dispatch = useDispatch();
   const data = useSelector((state) => state.auth.user);
@@ -27,6 +27,13 @@ const Upload = ({ exitPage, enterPage }) => {
   });
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (successMsg) {
+      toast.success(successMsg);
+      setSuccessMsg(null); // Clear the success message after showing the toast
+    }
+  }, [successMsg]);
 
   const onDropHandler = useCallback((acceptedFiles) => {
     const selectedFile = acceptedFiles[0];
@@ -86,13 +93,18 @@ const Upload = ({ exitPage, enterPage }) => {
         }
       );
       if (result.status === 200) {
-        setMsg(draft ? "Saved as draft" : "Paper uploaded successfully");
-        toast.success("Bookmarked successfully!");
-        exitPage();
-        navigate("/home");
+        const successMessage = draft
+          ? "Saved as draft successfully!"
+          : "Paper uploaded successfully!";
+        setSuccessMsg(successMessage);
+        setTimeout(() => {
+          exitPage();
+          navigate("/home");
+        }, 500); 
       }
     } catch (error) {
       console.error("Error submitting file:", error);
+      toast.error("Failed to upload the paper. Please try again.");
     }
   };
 

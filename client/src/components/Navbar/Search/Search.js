@@ -73,7 +73,7 @@ const Search = () => {
         <FontAwesomeIcon icon={faSearch} className={styles.searchIcon} />
         <input
           type="text"
-          placeholder="Search By PaperName/Author"
+          placeholder="Search By PaperTitle/Author"
           value={searchTerm}
           onChange={handleChange}
           className={styles.searchInput}

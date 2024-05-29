@@ -50,11 +50,14 @@ const ProfileDetails = ({ authorname }) => {
 
   const handleAuthorRatingChange = async (rating) => {
     try {
-      const response = await axios.post("http://localhost:8000/api/rate-author", {
-        authorName: authorname,
-        username: data.username,
-        rating,
-      });
+      const response = await axios.post(
+        "http://localhost:8000/api/rate-author",
+        {
+          authorName: authorname,
+          username: data.username,
+          rating,
+        }
+      );
 
       if (response.status === 200) {
         await fetchAuthorRatings(authorname);
@@ -105,7 +108,6 @@ const ProfileDetails = ({ authorname }) => {
       />
     ));
   };
-  
 
   useEffect(() => {
     const fetchUsername = authorname || data.username;
@@ -147,10 +149,10 @@ const ProfileDetails = ({ authorname }) => {
       } catch (error) {
         console.error("Error fetching papers:", error);
       }
-      return() => {
+      return () => {
         localStorage.removeItem("clickedRating");
         localStorage.removeItem("initialRating");
-      }
+      };
     };
 
     if (fetchUsername) {
@@ -176,6 +178,13 @@ const ProfileDetails = ({ authorname }) => {
       <div className={styles.media}>
         <div className={styles.profileMatter}>
           <span className={styles.profilename}>{profileData.username}</span>
+          <div className={styles.authorRating}>
+            <h4>Rating:</h4>
+            <div className={styles.stars}>
+              {renderStars(clickedRating)}
+              <span>({authorRatings.averageRating.toFixed(1)})</span>
+            </div>
+          </div>
           <div className={styles.profileColleg}>
             <ul>
               <li className={styles.profileCollege}>
@@ -189,7 +198,6 @@ const ProfileDetails = ({ authorname }) => {
           </div>
         </div>
 
-        
         {data.role === "author" && (
           <div className={styles.paperStats}>
             <div>Publications: {paperStats.totalPapers}</div>
@@ -198,11 +206,8 @@ const ProfileDetails = ({ authorname }) => {
           </div>
         )}
 
-        <div className={styles.authorRating}>
-          {/* <h3>Average Rating of the author: {authorRatings.averageRating.toFixed(1)}</h3>
-          <div className={styles.stars}>
-            {renderStars(authorRatings.averageRating, true)}
-          </div> */}
+        {/* <div className={styles.authorRating}>
+        
 
           <h4>Rating:&nbsp;</h4>
           <div className={styles.stars}>
@@ -211,7 +216,7 @@ const ProfileDetails = ({ authorname }) => {
           {authorRatings.averageRating.toFixed(1)}
           )</span>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

@@ -86,7 +86,7 @@
   border-radius: 25px;
   transition: background-color 0.2s, color 0.2s;
 }
-.filterDropdown {
+.filterDropdownViews {
   position: absolute;
   background-color: #ffffff;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
@@ -95,6 +95,12 @@
   width: 200px;
   z-index: 1;
   top: 20px;
+}
+
+.filterDropdown{
+  margin-top: 10px;
+  align-items: center;
+  margin-left: 10px;
 }
 
 .filterItem {

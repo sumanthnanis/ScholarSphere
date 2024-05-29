@@ -70,9 +70,9 @@
   border-radius: 4px;
   background-color: #f9f9f9;
 }
-.types {
+/* .types {
   display: flex;
-}
+} */
 @media (max-width: 470px) {
   .dropdownn-btn {
     padding: 10px;

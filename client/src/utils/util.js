@@ -1,10 +1,8 @@
-// utils.js
 import axios from "axios";
 import { toast } from "sonner";
 
 export const toggleBookmark = async (
   index,
-
   paperId,
   papers,
   bookmarkedPapers,
@@ -13,14 +11,14 @@ export const toggleBookmark = async (
   username
 ) => {
   try {
-    const paperArray = Array.isArray(papers) ? papers : [papers]; // Ensure papers is an array
+    const paperArray = Array.isArray(papers) ? papers : [papers];
     const paper = paperArray[index];
     const bookmarked = !bookmarkedPapers.some((bp) => bp._id === paper._id);
 
     const response = await axios.post(
       `http://localhost:8000/api/toggle-bookmark`,
       {
-        paperId: paperId, // Use the paperId parameter
+        paperId: paperId,
         username: username,
         bookmarked,
       }
@@ -54,7 +52,6 @@ export const toggleBookmark = async (
 
 export const showPdf = async (fileName, setPapers, papers) => {
   try {
-    // Increment the count in the database
     await axios.post(`http://localhost:8000/api/increase-count/${fileName}`);
 
     const url = `http://localhost:8000/files/${fileName}`;
@@ -66,7 +63,6 @@ export const showPdf = async (fileName, setPapers, papers) => {
     const fileURL = URL.createObjectURL(file);
     window.open(fileURL);
 
-    // Find the paper in the local state and update its count
     const updatedPapers = papers.map((paper) => {
       if (paper.pdf === fileName) {
         return { ...paper, count: paper.count + 1 };
@@ -74,7 +70,6 @@ export const showPdf = async (fileName, setPapers, papers) => {
       return paper;
     });
 
-    // Update the papers state in the Home component
     setPapers(updatedPapers);
   } catch (error) {
     console.error("Error fetching PDF:", error);
@@ -106,21 +101,45 @@ export const fetchProfiles = async () => {
   }
 };
 
-export const handleCiteThisPaper = async (
-  selectedPaper,
-  setPapers,
-  setCopySuccess,
-  papers
-) => {
+// export const handleCiteThisPaper = async (
+//   selectedPaper,
+//   setPapers,
+
+//   papers
+// ) => {
+//   if (!selectedPaper) return;
+
+//   try {
+//     await axios.post(
+//       `http://localhost:8000/api/increase-citations/${selectedPaper._id}`
+//     );
+
+//     if (Array.isArray(papers)) {
+//       setPapers((prevPapers) =>
+//         prevPapers.map((paper) =>
+//           paper._id === selectedPaper._id
+//             ? { ...paper, citations: paper.citations + 1 }
+//             : paper
+//         )
+//       );
+//     } else {
+//       setPapers((prevPaper) => ({
+//         ...prevPaper,
+//         citations: prevPaper.citations + 1,
+//       }));
+//     }
+//     const citationText = `Title: ${selectedPaper.title}, Author: ${selectedPaper.uploadedBy}`;
+//     await navigator.clipboard.writeText(citationText);
+//     console.log("Citation copied to clipboard:", citationText);
+//   } catch (error) {
+//     console.error("Error citing paper:", error);
+//   }
+// };
+export const handleCiteThisPaper = async (selectedPaper, setPapers, papers) => {
   if (!selectedPaper) return;
 
   try {
-    await axios.post(
-      `http://localhost:8000/api/increase-citations/${selectedPaper._id}`
-    );
-
     if (Array.isArray(papers)) {
-      // If papers is an array (as in the Home component)
       setPapers((prevPapers) =>
         prevPapers.map((paper) =>
           paper._id === selectedPaper._id
@@ -129,21 +148,23 @@ export const handleCiteThisPaper = async (
         )
       );
     } else {
-      // If papers is an object (as in the PaperPreview component)
       setPapers((prevPaper) => ({
         ...prevPaper,
         citations: prevPaper.citations + 1,
       }));
     }
+
+    await axios.post(
+      `http://localhost:8000/api/increase-citations/${selectedPaper._id}`
+    );
+
     const citationText = `Title: ${selectedPaper.title}, Author: ${selectedPaper.uploadedBy}`;
     await navigator.clipboard.writeText(citationText);
     console.log("Citation copied to clipboard:", citationText);
-    setCopySuccess(true);
   } catch (error) {
     console.error("Error citing paper:", error);
   }
 };
-
 export const fetchPapers = async (setPapers) => {
   try {
     console.log("dgdgddh");
@@ -158,17 +179,17 @@ export const fetchPapers = async (setPapers) => {
     console.error("Error fetching papers:", error);
   }
 };
-// apiUtils.js
+
 export const handleCopyCitation = async (
   paper,
-  setPapers,
+
   setIndividualCopySuccess,
   papers
 ) => {
   try {
     await handleCiteThisPaper(
       paper,
-      setPapers,
+
       (value) => {
         setIndividualCopySuccess((prev) => ({
           ...prev,

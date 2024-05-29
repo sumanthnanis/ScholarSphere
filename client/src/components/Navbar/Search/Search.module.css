@@ -98,3 +98,7 @@
 .author:hover {
   background-color: #e0e0e0;
 }
+.searchresult {
+  margin-left: 20px;
+  margin-top: 10px;
+}

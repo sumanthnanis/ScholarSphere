@@ -61,7 +61,9 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       count: 0,
       citations: 0,
       draft,
-      categories: categories ? categories.split(",") : [],
+      categories: Array.isArray(categories)
+        ? categories
+        : categories.split(","),
       publicationDate: new Date(),
       paperType,
       bookmarks: 0,

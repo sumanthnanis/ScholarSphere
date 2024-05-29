@@ -121,6 +121,9 @@ const Home = ({ getNavigatoin }) => {
       console.error("Error fetching papers:", error);
     }
   };
+  const handleCopyCitationWrapper = async (paper) => {
+    await handleCopyCitation(paper, setIndividualCopySuccess, papers);
+  };
 
   const aggregatedProfiles = profiles
     .map((profile) => {
@@ -186,6 +189,15 @@ const Home = ({ getNavigatoin }) => {
       console.error("Error fetching profiles with ratings:", error);
     }
   };
+  const updateCitationCount = (paperId) => {
+    setPapers((prevPapers) =>
+      prevPapers.map((paper) =>
+        paper._id === paperId
+          ? { ...paper, citations: paper.citations + 1 }
+          : paper
+      )
+    );
+  };
 
   const toggleDropdown = (dropdown) => {
     setActiveDropdown(activeDropdown === dropdown ? null : dropdown);
@@ -245,7 +257,7 @@ const Home = ({ getNavigatoin }) => {
                   >
                     Filter <i className="fas fa-caret-down" />
                     {activeDropdown === "filter" && (
-                      <ul className={styles.filterDropdown}>
+                      <ul className={styles.filterDropdownViews}>
                         <li
                           className={styles.filterItem}
                           onClick={handleMostViewedClick}
@@ -282,15 +294,9 @@ const Home = ({ getNavigatoin }) => {
                   handleCitePopup={(paper) =>
                     handleCitePopup(paper, setSelectedPaper, setShowPopup)
                   }
-                  handleCopyCitation={(paper) =>
-                    handleCopyCitation(
-                      paper,
-                      setPapers,
-                      setIndividualCopySuccess,
-                      papers
-                    )
-                  }
+                  handleCopyCitation={handleCopyCitationWrapper}
                   individualCopySuccess={individualCopySuccess}
+                  updateCitationCount={updateCitationCount}
                 />
               </div>
               {(activeTab === "authors" || activeTab === "all") && (
@@ -339,7 +345,7 @@ const Home = ({ getNavigatoin }) => {
             </p>
             <button
               className={styles.copyButton}
-              onClick={() => handleCopyCitation(selectedPaper)}
+              onClick={() => handleCopyCitationWrapper(selectedPaper)}
             >
               {individualCopySuccess[selectedPaper._id]
                 ? "Cited"
