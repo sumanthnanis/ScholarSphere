@@ -22,39 +22,41 @@ function App() {
   return (
     <BrowserRouter>
       <Provider store={store}>
-        {state && <Navbar />}
-        <BookmarksProvider>
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <Login
-                  onRender={() => setState(false)}
-                  setLoginState={() => setState(true)}
-                />
-              }
-            />
-            <Route
-              path="/home"
-              element={<Home getNavigatoin={() => setState(true)} />}
-            />
-            <Route
-              path="/upload"
-              element={
-                <Upload
-                  enterPage={() => setState(false)}
-                  exitPage={() => setState(true)}
-                />
-              }
-            />
-            <Route path="/my-papers" element={<AuthorPapers />} />
-            <Route path="/paper/:id" element={<PaperPreview />} />
-            <Route path="/user/:authorName" element={<Author />} />
-            <Route path="/category/:category" element={<CategoryPage />} />
-            <Route path="/user/profile" element={<Profile />} />
-            <Route path="/search/:query" element={<SearchResults />} />
-          </Routes>
-        </BookmarksProvider>
+        <div className="homeDiv">
+          <div className="navivv">{state && <Navbar />}</div>
+          <BookmarksProvider>
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <Login
+                    onRender={() => setState(false)}
+                    setLoginState={() => setState(true)}
+                  />
+                }
+              />
+              <Route
+                path="/home"
+                element={<Home getNavigatoin={() => setState(true)} />}
+              />
+              <Route
+                path="/upload"
+                element={
+                  <Upload
+                    enterPage={() => setState(false)}
+                    exitPage={() => setState(true)}
+                  />
+                }
+              />
+              <Route path="/my-papers" element={<AuthorPapers />} />
+              <Route path="/paper/:id" element={<PaperPreview />} />
+              <Route path="/user/:authorName" element={<Author />} />
+              <Route path="/category/:category" element={<CategoryPage />} />
+              <Route path="/user/profile" element={<Profile />} />
+              <Route path="/search/:query" element={<SearchResults />} />
+            </Routes>
+          </BookmarksProvider>
+        </div>
       </Provider>
     </BrowserRouter>
   );

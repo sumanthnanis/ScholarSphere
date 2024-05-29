@@ -1,7 +1,9 @@
 .App {
   text-align: center;
 }
-
+.homeDiv {
+  position: relative;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -26,6 +28,10 @@
 
 .App-link {
   color: #61dafb;
+}
+
+.navivv {
+  position: sticky;
 }
 
 @keyframes App-logo-spin {

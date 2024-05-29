@@ -1,18 +1,18 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
-import Navbar from "../Navbar/Navbar";
 import PaperList from "../Paper/Paper";
 import axios from "axios";
 import styles from "../Home/Home.module.css";
 import ProfileDetails from "../Profile/ProfileDetails/ProfileDetails";
 import BookmarksContext from "../../BookmarksContext";
 import { Toaster } from "sonner";
+import PopupComponent from "../../utils/PopupComponent";
 import {
   toggleBookmark,
   showPdf,
   handleCitePopup,
   handleClosePopup,
-  handleCiteThisPaper,
+  handleCopyCitation,
 } from "../../utils/util";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -23,6 +23,7 @@ const Author = () => {
   const [selectedPaper, setSelectedPaper] = useState(null);
   const [copySuccess, setCopySuccess] = useState(false);
   const dispatch = useDispatch();
+  const [individualCopySuccess, setIndividualCopySuccess] = useState({});
   const data = useSelector((prev) => prev.auth.user);
   const { bookmarkedPapers, setBookmarkedPapers } =
     useContext(BookmarksContext);
@@ -44,6 +45,18 @@ const Author = () => {
 
     fetchPapersByAuthor();
   }, [authorName]);
+  const handlePopupClose = () => {
+    handleClosePopup(setShowPopup, setSelectedPaper);
+  };
+
+  const handleCopyCitationWrapper = async (paper) => {
+    await handleCopyCitation(paper, setIndividualCopySuccess, papers);
+    setPapers((prevPapers) =>
+      prevPapers.map((p) =>
+        p._id === paper._id ? { ...p, citations: p.citations + 1 } : p
+      )
+    );
+  };
 
   return (
     <div className={styles.outputDiv}>
@@ -72,38 +85,13 @@ const Author = () => {
         }
       />
       {showPopup && selectedPaper && (
-        <div className={styles.popup}>
-          <div className={styles.popupContent}>
-            <span
-              className={styles.close}
-              onClick={() => handleClosePopup(setShowPopup, setSelectedPaper)}
-            >
-              &times;
-            </span>
-
-            <h2 className={styles.citePaper}>Cite Paper</h2>
-            <p>
-              {selectedPaper.uploadedBy}. {selectedPaper.title}
-            </p>
-            <button
-              className={styles.copyButton}
-              onClick={() =>
-                handleCiteThisPaper(
-                  selectedPaper,
-                  setPapers,
-                  setCopySuccess,
-                  papers
-                )
-              }
-            >
-              Copy Citation
-            </button>
-
-            {copySuccess && (
-              <p className={styles.successMessage}>Copied to clipboard!</p>
-            )}
-          </div>
-        </div>
+        <PopupComponent
+          content={`${selectedPaper.uploadedBy}. ${selectedPaper.title}`}
+          onClose={handlePopupClose}
+          handleCopyCitation={handleCopyCitationWrapper}
+          paper={selectedPaper}
+          individualCopySuccess={individualCopySuccess}
+        />
       )}
     </div>
   );

@@ -3,7 +3,7 @@ import axios from "axios";
 import styles from "./Home.module.css";
 import PaperList from "../Paper/Paper";
 import { Toaster } from "sonner";
-
+import PopupComponent from "../../utils/PopupComponent";
 import BookmarksContext from "../../BookmarksContext";
 import ToggleDropdown from "../Dropdown/ToggleDropdown";
 import { useDispatch, useSelector } from "react-redux";
@@ -121,8 +121,17 @@ const Home = ({ getNavigatoin }) => {
       console.error("Error fetching papers:", error);
     }
   };
+  const handlePopupClose = () => {
+    handleClosePopup(setShowPopup, setSelectedPaper);
+  };
+
   const handleCopyCitationWrapper = async (paper) => {
     await handleCopyCitation(paper, setIndividualCopySuccess, papers);
+    setPapers((prevPapers) =>
+      prevPapers.map((p) =>
+        p._id === paper._id ? { ...p, citations: p.citations + 1 } : p
+      )
+    );
   };
 
   const aggregatedProfiles = profiles
@@ -331,31 +340,13 @@ const Home = ({ getNavigatoin }) => {
         </div>
       </div>
       {showPopup && selectedPaper && (
-        <div className={styles.popup}>
-          <div className={styles.popupContent}>
-            <span
-              className={styles.close}
-              onClick={() => handleClosePopup(setShowPopup, setSelectedPaper)}
-            >
-              &times;
-            </span>
-            <h2 className={styles.citePaper}>Cite Paper</h2>
-            <p>
-              {selectedPaper.uploadedBy}. {selectedPaper.title}
-            </p>
-            <button
-              className={styles.copyButton}
-              onClick={() => handleCopyCitationWrapper(selectedPaper)}
-            >
-              {individualCopySuccess[selectedPaper._id]
-                ? "Cited"
-                : "Copy Citation"}
-            </button>
-            {individualCopySuccess[selectedPaper._id] && (
-              <p className={styles.successMessage}>Copied to clipboard!</p>
-            )}
-          </div>
-        </div>
+        <PopupComponent
+          content={`${selectedPaper.uploadedBy}. ${selectedPaper.title}`}
+          onClose={handlePopupClose}
+          handleCopyCitation={handleCopyCitationWrapper}
+          paper={selectedPaper}
+          individualCopySuccess={individualCopySuccess}
+        />
       )}
     </>
   );
