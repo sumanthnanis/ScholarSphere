@@ -124,66 +124,68 @@ const PaperPreview = () => {
       <Toaster richColors position="top-right" />
 
       <div className={styles.paperpreviewcontainer}>
-        <div className={styles.paperdetails}>
-          <div className={styles.uppercon}>
-            <div className={styles.citationscontainer}>
-              <div className={styles.papertypecon}>
-                <div className={styles.paperType}>
-                  <h5 className={styles.h5} id={styles.paperType}>
-                    {previewedPaper.paperType}
+        <div className={styles.paperHeading}>
+          <h3 className={styles.h3}>Related Papers</h3>
+          <div className={styles.paperdetails}>
+            <div className={styles.uppercon}>
+              <div className={styles.citationscontainer}>
+                <div className={styles.papertypecon}>
+                  <div className={styles.paperType}>
+                    <h5 className={styles.h5} id={styles.paperType}>
+                      {previewedPaper.paperType}
+                    </h5>
+                  </div>
+                  <h5 className={styles.papertitle}>{previewedPaper.title}</h5>
+                </div>
+                <div className={styles.innercontainer}>
+                  <div className={styles.citations}>
+                    <div className={styles.divv}>Citations:</div>{" "}
+                    <div>{previewedPaper.citations}</div>
+                  </div>
+                  <span className={styles.reads}>
+                    Reads: {previewedPaper.count}
+                  </span>
+                </div>
+              </div>
+
+              <div className={styles.date}>
+                <h5 className={styles.h5}>
+                  {new Date(previewedPaper.publicationDate).toLocaleDateString(
+                    undefined,
+                    {
+                      month: "long",
+                      year: "numeric",
+                    }
+                  )}
+                </h5>
+                <div className={styles.paperauthor}>
+                  <h5 className={styles.h5}>
+                    {" "}
+                    Author: {previewedPaper.uploadedBy}
                   </h5>
                 </div>
-                <h5 className={styles.papertitle}>{previewedPaper.title}</h5>
-              </div>
-              <div className={styles.innercontainer}>
-                <div className={styles.citations}>
-                  <div className={styles.divv}>Citations:</div>{" "}
-                  <div>{previewedPaper.citations}</div>
-                </div>
-                <span className={styles.reads}>
-                  Reads: {previewedPaper.count}
-                </span>
               </div>
             </div>
-
-            <div className={styles.date}>
-              <h5 className={styles.h5}>
-                {new Date(previewedPaper.publicationDate).toLocaleDateString(
-                  undefined,
-                  {
-                    month: "long",
-                    year: "numeric",
-                  }
-                )}
-              </h5>
-              <div className={styles.paperauthor}>
-                <h5 className={styles.h5}>
-                  {" "}
-                  Author: {previewedPaper.uploadedBy}
-                </h5>
-              </div>
+            <div className={styles.paperdescription}>
+              Description
+              <div className={styles.descriptionline}></div>
+              {previewedPaper.description}
+              <br></br>
+              <button className={styles.citebutton} onClick={handleCite}>
+                {buttonText}
+              </button>
+              <button className={styles.btnPrimary} onClick={handleShowPdf}>
+                <i
+                  className="fa fa-file-pdf-o"
+                  aria-hidden="true"
+                  id={styles.pdf}
+                >
+                  <span> PDF </span>
+                </i>
+              </button>
             </div>
-          </div>
-          <div className={styles.paperdescription}>
-            Description
-            <div className={styles.descriptionline}></div>
-            {previewedPaper.description}
-            <br></br>
-            <button className={styles.citebutton} onClick={handleCite}>
-              {buttonText}
-            </button>
-            <button className={styles.btnPrimary} onClick={handleShowPdf}>
-              <i
-                className="fa fa-file-pdf-o"
-                aria-hidden="true"
-                id={styles.pdf}
-              >
-                <span> PDF </span>
-              </i>
-            </button>
           </div>
         </div>
-
         <div className={styles.relatedPapers}>
           <h3 className={styles.h3}>Related Papers</h3>
 

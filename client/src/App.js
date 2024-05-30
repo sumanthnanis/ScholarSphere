@@ -16,6 +16,7 @@ import { store } from "./reducers/store";
 import { Provider } from "react-redux";
 import SearchResults from "./components/Navbar/Search/searchResults";
 import Navbar from "./components/Navbar/Navbar";
+import AuthorHome from "./components/Home/AuthorHome";
 
 function App() {
   const [state, setState] = useState(false);
@@ -38,6 +39,10 @@ function App() {
               <Route
                 path="/home"
                 element={<Home getNavigatoin={() => setState(true)} />}
+              />
+              <Route
+                path="/author"
+                element={<AuthorHome getNavigatoin={() => setState(true)} />}
               />
               <Route
                 path="/upload"

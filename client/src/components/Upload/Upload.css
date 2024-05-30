@@ -139,6 +139,20 @@
   font-size: 1em;
   transition: background-color 0.3s ease;
 }
+
+.exitPage{
+  text-decoration: underline;
+  background-color: #f9f9f9;
+  align-items: center;
+  justify-content: center;
+  text-align: right;
+}
+
+.middle{
+  text-align: center;
+  margin-top: 20px;
+}
+
 @media (max-width: 800px) {
   .button {
     padding: 10px 20px;

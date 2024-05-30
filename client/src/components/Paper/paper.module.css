@@ -150,10 +150,6 @@
   transition: color 0.3s ease;
 }
 
-.btnBookmark:hover {
-  color: red;
-}
-
 .bookmarked {
   color: red;
 }
@@ -167,10 +163,6 @@
   transition: color 0.3s ease;
 }
 
-.citeButton:hover {
-  color: #007bff;
-}
-
 .tooltip {
   visibility: hidden;
   width: 120px;
@@ -181,7 +173,7 @@
   padding: 5px 0;
   position: absolute;
   z-index: 1;
-  bottom: 125%;
+  bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
   opacity: 0;
@@ -192,6 +184,13 @@
 .citeButton:hover .tooltip {
   visibility: visible;
   opacity: 1;
+}
+.btnBookmark {
+  position: relative; /* Add this to ensure tooltip is positioned relative to the button */
+}
+
+.citeButton {
+  position: relative; /* Add this to ensure tooltip is positioned relative to the button */
 }
 .listButtons {
   text-align: right;

@@ -5,8 +5,9 @@ import "./Upload.css";
 import { Toaster, toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { FaHome } from "react-icons/fa";
 
-const Upload = ({ exitPage, enterPage }) => {
+const Upload = ({ enterPage }) => {
   enterPage();
   const [file, setFile] = useState(null);
   const [msg, setMsg] = useState(null);
@@ -97,16 +98,21 @@ const Upload = ({ exitPage, enterPage }) => {
           ? "Saved as draft successfully!"
           : "Paper uploaded successfully!";
         setSuccessMsg(successMessage);
-        setTimeout(() => {
-          exitPage();
-          navigate("/home");
-        }, 500); 
+        // setTimeout(() => {
+        //   exitPage();
+        //   navigate("/home");
+        // }, 500); 
       }
     } catch (error) {
       console.error("Error submitting file:", error);
       toast.error("Failed to upload the paper. Please try again.");
     }
   };
+
+  const exitPage = () => {
+    // exitPage();
+    navigate("/home");
+  }
 
   return (
     <>
@@ -254,6 +260,9 @@ const Upload = ({ exitPage, enterPage }) => {
             <button className="button" onClick={(e) => submitFile(e, 1)}>
               Save as draft
             </button>
+          </div>
+          <div className="middle">
+            <a onClick={exitPage} className="exitPage"> <FaHome/>{" "}Back to home</a>
           </div>
         </div>
       </div>
