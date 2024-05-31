@@ -78,7 +78,48 @@ router.post("/upload", upload.single("file"), async (req, res) => {
     res.status(500).json({ error: "Failed to upload file" });
   }
 });
+router.post("/citedby", async (req, res) => {
+  const { username, paperId } = req.body;
 
+  try {
+    const paper = await Paper.findById(paperId);
+
+    if (!paper) {
+      return res.status(404).json({ message: "Paper not found" });
+    }
+
+    paper.citedby = paper.citedby || [];
+    if (!paper.citedby.includes(username)) {
+      paper.citedby.push(username);
+    }
+
+    await paper.save();
+    res
+      .status(200)
+      .json({ message: "Citation information added successfully" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Failed to add citation information", error });
+  }
+});
+router.get("/citedby/:paperId", async (req, res) => {
+  const { paperId } = req.params;
+
+  try {
+    const paper = await Paper.findById(paperId);
+
+    if (!paper) {
+      return res.status(404).json({ message: "Paper not found" });
+    }
+
+    res.status(200).json({ citedby: paper.citedby });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Failed to retrieve citation information", error });
+  }
+});
 router.post("/add-file", async (req, res) => {
   const { id, username } = req.body;
 

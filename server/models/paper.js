@@ -11,6 +11,7 @@ const PaperSchema = new mongoose.Schema(
     citations: Number,
     draft: Number,
     categories: [String],
+    citedby: [String],
     publicationDate: Date,
     paperType: String,
     bookmarks: { type: Number, default: 0 },
