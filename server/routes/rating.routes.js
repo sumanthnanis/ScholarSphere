@@ -7,6 +7,7 @@ const User = require("../models/user.model");
 const AuthorRating = require("../models/AuthorRating.model");
 
 router.post("/rate-paper", async (req, res) => {
+  console.log(req.body);
   const { paperId, username, rating } = req.body;
 
   try {

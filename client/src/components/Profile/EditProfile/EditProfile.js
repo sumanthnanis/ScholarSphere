@@ -160,7 +160,7 @@ const EditProfile = ({ initialActiveTab }) => {
                     }`}
                     onClick={() => setActiveTab("my-list")}
                   >
-                    My List
+                    My Bookmarks
                   </a>
                 </div>
                 <hr className="list-group-line" />

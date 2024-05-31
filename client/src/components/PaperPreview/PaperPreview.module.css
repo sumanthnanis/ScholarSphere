@@ -7,30 +7,27 @@
   flex-direction: row;
 
   justify-content: space-between;
+
   /* gap: 5px; */
 }
-
 .paperdetails {
   background-color: white;
-  padding: 20px;
+  padding: 10px;
   border: 1px solid #ccc;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   align-self: flex-start;
 }
+
 .paperHeading {
   display: flex;
   flex-direction: column;
+  flex: 1.6;
 }
 
 .relatedPapers {
   flex: 1;
-  /* margin: 20px; */
-  /* background-color: white; */
-  /* padding: 10px; */
-  /* border: 1px solid #ccc; */
-  border-radius: 8px;
-  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
+  width: 70%;
 }
 
 .relatedPaperHeading {
@@ -41,6 +38,33 @@
   margin: 5px;
 }
 
+.rating {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.stars {
+  display: flex;
+  flex-direction: row;
+}
+.rateauthor {
+  display: flex;
+  justify-content: end;
+}
+.star:hover {
+  color: gold;
+}
+
+.averageRating {
+  margin-left: 5px;
+}
+
+.starsHome {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 3px;
+}
 .papertypecon {
   display: flex;
   flex-direction: column;

@@ -18,6 +18,8 @@ const PaperList = ({
   handleDraft,
   showButtons,
   showBookmark = true,
+  excludeCurrentUser = false,
+  showStars = true, // New prop to control star display
 }) => {
   const [profiles, setProfiles] = useState([]);
   const [existingRatings, setExistingRatings] = useState({});
@@ -74,7 +76,19 @@ const PaperList = ({
     return profile ? `http://localhost:8000${profile.profileImage}` : logo;
   };
 
-  const renderStars = (paperId) => {
+  const renderStars = (paperId, uploadedBy) => {
+    const isCurrentUser = uploadedBy === state.username;
+
+    if (!showStars) {
+      const average = existingRatings[paperId]?.averageRating ?? 0;
+      return <span>Average Rating: {average.toFixed(1)}</span>;
+    }
+
+    if (isCurrentUser) {
+      const average = existingRatings[paperId]?.averageRating ?? 0;
+      return <span>Average Rating: {average.toFixed(1)}</span>;
+    }
+
     const { averageRating, userRating } = existingRatings[paperId] || {};
     const userHasRated = userRating !== null;
     const ratingToDisplay = userHasRated ? userRating : averageRating || 0;
@@ -130,9 +144,13 @@ const PaperList = ({
     }
   };
 
+  const filteredPapers = excludeCurrentUser
+    ? papers.filter((paper) => paper.uploadedBy !== state.username)
+    : papers;
+
   return (
     <div className={styles.paperrdiv}>
-      {papers.map(
+      {filteredPapers.map(
         (data, index) =>
           data && (
             <div
@@ -197,7 +215,6 @@ const PaperList = ({
                       <span> PDF </span>
                     </i>
                   </button>
-
                   {showBookmark && (
                     <button
                       className={`${styles.btnBookmark} ${
@@ -218,12 +235,16 @@ const PaperList = ({
                   </button>
                 </div>
                 <div className={styles.rating}>
-                  {renderStars(data._id)}
-                  <span className={styles.averageRating}>
-                    (
-                    {(existingRatings[data._id]?.averageRating ?? 0).toFixed(1)}
-                    )
-                  </span>
+                  {renderStars(data._id, data.uploadedBy)}
+                  {showStars && (
+                    <span className={styles.averageRating}>
+                      (
+                      {(existingRatings[data._id]?.averageRating ?? 0).toFixed(
+                        1
+                      )}
+                      )
+                    </span>
+                  )}
                 </div>
               </div>
               <div className={styles.rateauthor}>

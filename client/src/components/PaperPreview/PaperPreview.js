@@ -5,6 +5,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import styles from "./PaperPreview.module.css";
 import PaperList from "../Paper/Paper";
+import { FaBookmark, FaStar } from "react-icons/fa";
 import { toast, Toaster } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -28,6 +29,7 @@ const PaperPreview = () => {
   const [relatedPapers, setRelatedPapers] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [buttonText, setButtonText] = useState("Cite this paper");
+  const [existingRatings, setExistingRatings] = useState({});
   const [individualCopySuccess, setIndividualCopySuccess] = useState({});
   const [bookmarked, setBookmarked] = useState(false);
 
@@ -60,6 +62,86 @@ const PaperPreview = () => {
 
     fetchPaperDetails();
   }, [id, username]);
+
+  useEffect(() => {
+    const fetchRatings = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8000/api/get-ratings/${previewedPaper._id}?username=${data.username}`
+        );
+        const ratingData = await response.json();
+
+        setExistingRatings({
+          [previewedPaper._id]: {
+            averageRating: ratingData.averageRating,
+            userRating: ratingData.userRating,
+          },
+        });
+      } catch (error) {
+        console.error("Error fetching ratings:", error);
+      }
+    };
+
+    if (previewedPaper) {
+      fetchRatings();
+    }
+  }, [previewedPaper, data.username]);
+
+  const renderStars = (paperId, uploadedBy) => {
+    const isCurrentUser = uploadedBy === data.username;
+
+    if (isCurrentUser) {
+      const average = existingRatings[paperId]?.averageRating ?? 0;
+      return <span>Average Rating: {average.toFixed(1)}</span>;
+    }
+
+    if (isCurrentUser) {
+      const average = existingRatings[paperId]?.averageRating ?? 0;
+      return <span>Average Rating: {average.toFixed(1)}</span>;
+    }
+
+    const { averageRating, userRating } = existingRatings[paperId] || {};
+    const userHasRated = userRating !== null;
+    const ratingToDisplay = userHasRated ? userRating : averageRating || 0;
+
+    return [1, 2, 3, 4, 5].map((star) => (
+      <FaStar
+        key={star}
+        className={styles.star}
+        color={userHasRated && star <= ratingToDisplay ? "gold" : "violet"}
+        onClick={() => handleRatingChange(paperId, star)}
+      />
+    ));
+  };
+  const handleRatingChange = async (paperId, rating) => {
+    try {
+      const response = await fetch("http://localhost:8000/api/rate-paper", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ paperId, username: data.username, rating }),
+      });
+
+      if (response.ok) {
+        const ratingResponse = await fetch(
+          `http://localhost:8000/api/get-ratings/${paperId}?username=${data.username}`
+        );
+        const ratingData = await ratingResponse.json();
+
+        setExistingRatings({
+          [previewedPaper._id]: {
+            averageRating: ratingData.averageRating,
+            userRating: ratingData.userRating,
+          },
+        });
+      } else {
+        console.error("Error submitting rating:", response.status);
+      }
+    } catch (error) {
+      console.error("Error submitting rating:", error);
+    }
+  };
 
   useEffect(() => {
     if (previewedPaper && previewedPaper.categories) {
@@ -183,6 +265,16 @@ const PaperPreview = () => {
                   <span> PDF </span>
                 </i>
               </button>
+              <div className={styles.rating}>
+                {renderStars(previewedPaper._id, previewedPaper.uploadedBy)}
+                <span className={styles.averageRating}>
+                  (
+                  {(
+                    existingRatings[previewedPaper._id]?.averageRating ?? 0
+                  ).toFixed(1)}
+                  )
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -194,6 +286,7 @@ const PaperPreview = () => {
             bookmarks={relatedPapers.map((paper) =>
               bookmarkedPapers.some((bp) => bp._id === paper._id)
             )}
+            className={styles.related}
             toggleBookmark={(index, id) =>
               toggleBookmark(
                 index,

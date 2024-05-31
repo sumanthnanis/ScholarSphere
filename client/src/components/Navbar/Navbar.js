@@ -57,7 +57,7 @@ function Navbar({
   };
 
   const handleMyPapersClick = () => {
-    navigate("/user/profile", {
+    navigate("/home", {
       state: { activeTab: "research-papers" },
     });
   };
@@ -119,7 +119,7 @@ function Navbar({
                       onClick={handleMyPapersClick}
                       className={styles.linked}
                     >
-                      My Papers
+                      Papers
                     </div>
                   </li>
                 )}
@@ -156,7 +156,7 @@ function Navbar({
                     </NavLink>
                   </li>
                   <li className={styles.listdrop} onClick={handleMyListClick}>
-                    <div className={styles.navitem}>My List</div>
+                    <div className={styles.navitem}> Bookmarks</div>
                   </li>
                   {isMediumScreen && (
                     <>
@@ -164,7 +164,7 @@ function Navbar({
                         className={styles.listdrop}
                         onClick={handleMyPapersClick}
                       >
-                        <div className={styles.navitem}>My Papers</div>
+                        <div className={styles.navitem}>Papers</div>
                       </li>
 
                       {(data.role === "author" ||

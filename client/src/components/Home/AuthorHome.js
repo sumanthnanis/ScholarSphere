@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import PaperList from "../Paper/Paper";
 import axios from "axios";
 import { Toaster, toast } from "sonner";
+import { NavLink } from "react-router-dom";
 import styles from "./AuthorHome.module.css";
 import FilterDropdown from "../Dropdown/FilterDropdown";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,18 +10,21 @@ import {
   showPdf,
   handleCitePopup,
   handleCopyCitation,
+  fetchProfiles,
   handleClosePopup,
 } from "../../utils/util";
 import PopupComponent from "../../utils/PopupComponent";
-import Home from "./Home";
 
 const AuthorHome = ({ getNavigatoin }) => {
   console.log("hiiiii");
   getNavigatoin();
   const [draft0Papers, setDraft0Papers] = useState([]);
+
   const [draft1Papers, setDraft1Papers] = useState([]);
+  const [profiles, setProfiles] = useState([]);
   const [activeTab, setActiveTab] = useState("all");
-  const [state, setState] = useState("false");
+  const [paper, setPaper] = useState([]);
+
   const dispatch = useDispatch();
   const data = useSelector((state) => state.auth.user);
   const [showPopup, setShowPopup] = useState(false);
@@ -76,12 +80,79 @@ const AuthorHome = ({ getNavigatoin }) => {
       console.error("Error fetching papers:", error);
     }
   };
+  const fetchAllPapers = async () => {
+    try {
+      const url = "http://localhost:8000/api/get-papers";
+      const response = await axios.get(url);
+      let papersData = response.data;
+      setPaper(papersData);
+    } catch (error) {
+      console.error("Error fetching papers:", error);
+    }
+  };
+
+  const fetchProfilesWithRatings = async () => {
+    try {
+      const profileData = await fetchProfiles();
+      const profilesWithRatings = await Promise.all(
+        profileData.map(async (profile) => {
+          const response = await axios.get(
+            `http://localhost:8000/api/get-author-ratings/${profile.username}`
+          );
+          const { averageRating } = response.data;
+          return { ...profile, averageRating: averageRating || 0 };
+        })
+      );
+      setProfiles(profilesWithRatings);
+    } catch (error) {
+      console.error("Error fetching profiles with ratings:", error);
+    }
+  };
 
   useEffect(() => {
     if (data.username) {
       fetchPapers();
     }
   }, [data.username]);
+
+  useEffect(() => {
+    fetchAllPapers();
+    fetchProfilesWithRatings();
+  }, []);
+
+  const aggregatedProfiles = profiles
+    .filter((profile) => {
+      const isAuthorWithPaper = paper.some(
+        (p) => p.uploadedBy === profile.username
+      );
+      return isAuthorWithPaper;
+    })
+    .map((profile) => {
+      const authorPapers = paper.filter(
+        (p) => p.uploadedBy === profile.username
+      );
+
+      const totalPapers = authorPapers.length;
+      const totalCitations = authorPapers.reduce(
+        (sum, p) => sum + p.citations,
+        0
+      );
+      const totalReads = authorPapers.reduce((sum, p) => sum + p.count, 0);
+
+      return {
+        username: profile.username,
+        totalPapers,
+        totalCitations,
+        totalReads,
+        profileImage: profile.profileImage,
+        institution: profile.institution,
+        averageRating: profile.averageRating || 0,
+      };
+    });
+
+  const sortedProfiles = [...aggregatedProfiles].sort(
+    (a, b) => b.averageRating - a.averageRating
+  );
 
   const handleDelete = async (paperId) => {
     try {
@@ -137,7 +208,6 @@ const AuthorHome = ({ getNavigatoin }) => {
         </div>
         <div className={styles.researchPapersTabs}>
           <Toaster richColors position="top-right" />
-
           <div className={styles.tabsSidebar}>
             <div
               className={`${styles.tabLink} ${
@@ -166,21 +236,20 @@ const AuthorHome = ({ getNavigatoin }) => {
           </div>
           <div className={styles.cardBody}>
             {activeTab === "all" && (
-              <div className={styles.scrollableList}>
-                <PaperList
-                  className={styles.allPapersDiv}
-                  papers={allPapers}
-                  bookmarks={[]}
-                  toggleBookmark={() => {}}
-                  showPdf={showPdf}
-                  handleCitePopup={(paper) =>
-                    handleCitePopup(paper, setSelectedPaper, setShowPopup)
-                  }
-                  handleCopyCitation={handleCopyCitationWrapper}
-                  state={""}
-                  showBookmark={false}
-                />
-              </div>
+              <PaperList
+                className={styles.allPapersDiv}
+                papers={allPapers}
+                bookmarks={[]}
+                toggleBookmark={() => {}}
+                showPdf={showPdf}
+                handleCitePopup={(paper) =>
+                  handleCitePopup(paper, setSelectedPaper, setShowPopup)
+                }
+                handleCopyCitation={handleCopyCitationWrapper}
+                state={""}
+                showBookmark={false}
+                showStars={false}
+              />
             )}
             {activeTab === "published" && (
               <div className={styles.scrollableList}>
@@ -222,6 +291,65 @@ const AuthorHome = ({ getNavigatoin }) => {
               </div>
             )}
           </div>
+
+          <div className={styles.total}>
+            {sortedProfiles.map((profile, index) => (
+              <NavLink
+                key={index}
+                className={styles.authorCard}
+                to={`/user/${encodeURIComponent(profile.username)}`}
+              >
+                <div className={styles.card}>
+                  <div className={styles.profileContainer}>
+                    <div className={styles.imageContainer}>
+                      {profile.profileImage && (
+                        <img
+                          src={`http://localhost:8000${profile.profileImage}`}
+                          alt={profile.username}
+                          className={styles.profileImage}
+                        />
+                      )}
+                    </div>
+                    <div className={styles.detailsOverlay}>
+                      <div className={styles.userInfo}>
+                        <h4 className={styles.userName}>
+                          {profile.username}{" "}
+                          <span className={styles.statLabel}>
+                            ({profile.averageRating})
+                          </span>
+                        </h4>
+                        <p className={styles.userInstitution}>
+                          {profile.institution}
+                        </p>
+                      </div>
+                      <div className={styles.stats}>
+                        <div className={styles.statItem}>
+                          <span className={styles.statNumber}>
+                            {profile.totalPapers}
+                          </span>
+                          <span className={styles.statLabel}>Publications</span>
+                        </div>
+                        <div className={styles.statDivider}></div>
+                        <div className={styles.statItem}>
+                          <span className={styles.statNumber}>
+                            {profile.totalCitations}
+                          </span>
+                          <span className={styles.statLabel}>Citations</span>
+                        </div>
+                        <div className={styles.statDivider}></div>
+                        <div className={styles.statItem}>
+                          <span className={styles.statNumber}>
+                            {profile.totalReads}
+                          </span>
+                          <span className={styles.statLabel}>Reads</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </NavLink>
+            ))}
+          </div>
         </div>
         {showPopup && selectedPaper && (
           <PopupComponent
@@ -233,7 +361,6 @@ const AuthorHome = ({ getNavigatoin }) => {
           />
         )}
       </div>
-      <Home getNavigatoin={() => setState(true)} />
     </>
   );
 };

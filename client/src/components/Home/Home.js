@@ -306,6 +306,7 @@ const Home = ({ getNavigatoin }) => {
                   handleCopyCitation={handleCopyCitationWrapper}
                   individualCopySuccess={individualCopySuccess}
                   updateCitationCount={updateCitationCount}
+                  excludeCurrentUser={true}
                 />
               </div>
               {(activeTab === "authors" || activeTab === "all") && (
