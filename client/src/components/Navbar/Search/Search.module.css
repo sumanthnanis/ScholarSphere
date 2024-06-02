@@ -68,6 +68,9 @@
 .filtersearch {
   display: flex;
   flex-direction: row;
+  position: relative;
+  justify-content: space-between; /* Add this line */
+  align-items: center;
 }
 
 .searchresult {
@@ -75,9 +78,11 @@
   margin-top: 10px;
 }
 
-.filterContainer {
+.filter-container {
   position: relative;
-  display: inline-block;
+}
+.icon {
+  margin-right: 20px;
 }
 
 .filterIcon {
@@ -88,7 +93,7 @@
 
 .dropdown {
   position: absolute;
-  top: 30px; /* Adjust this value as needed to place the dropdown correctly */
+  top: calc(100% + 8px); /* Position the dropdown below the filter icon */
   right: 0;
   background-color: white;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);

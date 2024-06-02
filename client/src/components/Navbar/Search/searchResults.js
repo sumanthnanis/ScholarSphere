@@ -119,7 +119,9 @@ const SearchResults = () => {
     <div>
       <div className={styles.filtersearch}>
         <h4 className={styles.searchresult}>Search Results for "{query}"</h4>
-        <FontAwesomeIcon icon={faFilter} onClick={handleFilterClick} />
+        <div className={styles.icon}>
+          <FontAwesomeIcon icon={faFilter} onClick={handleFilterClick} />
+        </div>
 
         {showDropdown && (
           <div className={styles.dropdown}>
