@@ -3,14 +3,15 @@
   left: 17vw;
   display: flex;
   flex-direction: column;
-
   margin-top: 5px;
 }
+
 @media (max-width: 1170px) {
   .searchContainer {
     left: 13vw;
   }
 }
+
 @media (max-width: 1065px) {
   .searchContainer {
     left: 17vw;
@@ -23,46 +24,11 @@
   width: 200%;
   padding: 10px;
   border-radius: 25px;
-
   box-shadow: rgba(203, 203, 203, 0.35) 0px 5px 15px;
   background-color: white;
+  position: relative;
 }
-/* @media (max-width: 992px) {
-  .searchBar {
-    width: 150%;
-    margin-left: 0;
-    margin-right: 0;
-  }
-}
-@media (max-width: 815px) {
-  .searchContainer {
-    left: 15%;
-  }
-  .searchBar {
-    width: 120%;
-  }
-} */
-/* .searchButton {
-  border: none;
-  background: none;
-  outline: none;
-  cursor: pointer;
-}
-@media (max-width: 900px) {
-  .searchBar {
-    display: none;
-  }
-} */
 
-/* @media (max-width: 500px) {
-  .searchContainer {
-    top: 50%;
-    left: 8%;
-  }
-  .searchBar {
-    width: 120%;
-  }
-} */
 .searchIcon {
   margin-right: 10px;
   color: gray;
@@ -98,7 +64,46 @@
 .author:hover {
   background-color: #e0e0e0;
 }
+
+.filtersearch {
+  display: flex;
+  flex-direction: row;
+}
+
 .searchresult {
   margin-left: 20px;
   margin-top: 10px;
+}
+
+.filterContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.filterIcon {
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+}
+
+.dropdown {
+  position: absolute;
+  top: 30px; /* Adjust this value as needed to place the dropdown correctly */
+  right: 0;
+  background-color: white;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  min-width: 160px;
+  padding: 12px 16px;
+  border-radius: 4px;
+}
+
+.dropdown label {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.dropdown label input {
+  margin-right: 8px;
 }

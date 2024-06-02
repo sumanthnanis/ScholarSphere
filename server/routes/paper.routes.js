@@ -300,7 +300,6 @@ router.delete("/papers/:paperId", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
-
 router.get("/search", async (req, res) => {
   console.log("in search");
   let paperQuery = {};
@@ -320,8 +319,6 @@ router.get("/search", async (req, res) => {
     }
 
     const paperSearchPromise = Paper.find(paperQuery);
-    // console.log(paperSearchPromise);
-
     const profileSearchPromise = Profile.find({
       username: { $regex: searchData, $options: "i" },
     });
@@ -339,7 +336,7 @@ router.get("/search", async (req, res) => {
       });
     }
 
-    const allPapers = [...new Set([...papers, ...userPapers])];
+    let allPapers = [...new Set([...papers, ...userPapers])];
 
     const response = {
       papers: allPapers,
@@ -353,6 +350,86 @@ router.get("/search", async (req, res) => {
     res.status(500).send({ status: "error" });
   }
 });
+
+// router.get("/search", async (req, res) => {
+//   console.log("in search");
+//   let paperQuery = {};
+//   console.log(req.query);
+//   const searchData = req.query.search;
+//   const mostViewed = req.query.mostViewed === "true";
+//   const mostCited = req.query.mostCited === "true";
+//   const mostRated = req.query.mostRated === "true";
+//   console.log(searchData);
+//   console.log(mostViewed, mostCited, mostRated);
+
+//   try {
+//     if (searchData) {
+//       paperQuery = {
+//         $or: [
+//           { title: { $regex: searchData, $options: "i" } },
+//           { description: { $regex: searchData, $options: "i" } },
+//           { uploadedBy: { $regex: searchData, $options: "i" } },
+//         ],
+//       };
+//     }
+
+//     const paperSearchPromise = Paper.find(paperQuery);
+//     const profileSearchPromise = Profile.find({
+//       username: { $regex: searchData, $options: "i" },
+//     });
+
+//     const [papers, profiles] = await Promise.all([
+//       paperSearchPromise,
+//       profileSearchPromise,
+//     ]);
+
+//     let userPapers = [];
+//     if (profiles.length > 0) {
+//       const usernames = profiles.map((profile) => profile.username);
+//       userPapers = await Paper.find({
+//         uploadedBy: { $in: usernames },
+//       });
+//     }
+
+//     let allPapers = [...new Set([...papers, ...userPapers])];
+
+//     // Apply filters first
+//     if (mostViewed) {
+//       allPapers = allPapers.filter((paper) => paper.count);
+//     }
+//     if (mostCited) {
+//       allPapers = allPapers.filter((paper) => paper.citations);
+//     }
+//     if (mostRated) {
+//       allPapers = allPapers.filter((paper) => paper.averageRating);
+//     }
+
+//     if (mostViewed) {
+//       allPapers = allPapers.sort((a, b) => (b.count || 0) - (a.count || 0));
+//     }
+//     if (mostCited) {
+//       allPapers = allPapers.sort(
+//         (a, b) => (b.citations || 0) - (a.citations || 0)
+//       );
+//     }
+//     if (mostRated) {
+//       allPapers = allPapers.sort(
+//         (a, b) => (b.averageRating || 0) - (a.averageRating || 0)
+//       );
+//     }
+
+//     const response = {
+//       papers: allPapers,
+//       profiles: profiles,
+//     };
+
+//     res.send(response);
+//     console.log(response);
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).send({ status: "error" });
+//   }
+// });
 
 router.get("/papers-by-category", async (req, res) => {
   const category = req.query.category;
