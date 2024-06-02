@@ -36,10 +36,21 @@ const Login = ({ onRender, setLoginState }) => {
     const data = await response.json();
     dispatch(setUser(data));
     console.log(data);
-    if (data.status === "ok" && data.role === "User") {
-      navigate("/home", { state: data });
+    if (data.status === "ok") {
+      if (data.role === "user") {
+        navigate("/home", { state: data });
+        dispatch(setUser(data));
+        setLoginState();
+      } else if (data.role === "author") {
+        navigate("/author", { state: data });
+        dispatch(setUser(data));
+
+        setLoginState();
+      } else {
+        setMessage("Invalid role.");
+      }
     } else {
-      navigate("/author", { state: data });
+      setMessage("Please check your email and password");
     }
   }
 
