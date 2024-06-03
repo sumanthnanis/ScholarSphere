@@ -161,6 +161,7 @@ ul {
 
 .dropdownToggle {
   position: relative;
+  cursor: pointer;
 }
 
 .dropdownToggle .filterDropdown,

@@ -50,8 +50,9 @@
 }
 
 .dropdownnName {
-  text-decoration: underline;
-  color: gray;
+  text-decoration: none;
+  color: black;
+
   margin-left: 10px;
 }
 
@@ -63,12 +64,8 @@
 }
 
 .dropdownn-btn {
-  padding: 10px;
   font-size: 16px;
   cursor: pointer;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #f9f9f9;
 }
 /* .types {
   display: flex;

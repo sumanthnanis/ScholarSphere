@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import PaperList from "../Paper/Paper";
 import BookmarksContext from "../../BookmarksContext";
 import { useDispatch, useSelector } from "react-redux";
-import Navbar from "../Navbar/Navbar";
+
 import styles from "../Home/Home.module.css";
 import {
   toggleBookmark,
@@ -60,7 +60,6 @@ const CategoryPage = () => {
 
   return (
     <div>
-      <Navbar />
       <div className={styles.heading}>Papers in "{category}" category</div>
       <PaperList
         papers={papers}

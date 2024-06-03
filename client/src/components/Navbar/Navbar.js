@@ -67,11 +67,12 @@ function Navbar({
       state: { activeTab: "my-list" },
     });
   };
+  const logoLinkDestination = data.role === "author" ? "/author" : "/home";
 
   return (
     <nav id={styles.nav}>
       <div className={styles.logocontainer}>
-        <NavLink to="/home">
+        <NavLink to={logoLinkDestination}>
           <img className={styles.logo} src={logo} alt="logo" />
         </NavLink>
       </div>
@@ -119,7 +120,7 @@ function Navbar({
                       onClick={handleMyPapersClick}
                       className={styles.linked}
                     >
-                      Papers
+                      Other Researches
                     </div>
                   </li>
                 )}

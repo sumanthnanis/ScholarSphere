@@ -6,7 +6,7 @@ const Filterdropdownn = ({ onFilterChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState("All");
   const filterOptions = [
-    { title: "All", cName: "dropdownn-link" },
+    { title: "All Papers", cName: "dropdownn-link" },
     { title: "Published Papers", cName: "dropdownn-link" },
     { title: "Drafts", cName: "dropdownn-link" },
   ];
@@ -20,8 +20,7 @@ const Filterdropdownn = ({ onFilterChange }) => {
   return (
     <div className="dropdownn">
       <div className="dropdownn-btn" onClick={() => setIsOpen(!isOpen)}>
-        Filter by content type:{" "}
-        <span className="dropdownnName">Research Papers</span>{" "}
+        <span className="dropdownnName">All Papers</span>{" "}
         <i className={isOpen ? "fa fa-caret-up" : "fa fa-caret-down"} />
       </div>
       {isOpen && (

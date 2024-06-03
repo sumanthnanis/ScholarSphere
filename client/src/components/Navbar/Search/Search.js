@@ -10,11 +10,13 @@ const Search = () => {
 
   const handleChange = (e) => {
     const value = e.target.value;
-    if (value === " ") {
-      navigate("/home");
-    }
+
     setSearchTerm(value);
-    navigate(`/search/${value}`);
+    if (value.trim() === "") {
+      navigate(`/home`);
+    } else {
+      navigate(`/search/${value}`);
+    }
   };
 
   const handleSubmit = (e) => {

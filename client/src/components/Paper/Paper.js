@@ -11,7 +11,7 @@
 //   papers,
 //   bookmarks,
 //   toggleBookmark,
-//   searchQuery,
+
 //   showPdf,
 //   handleCitePopup,
 //   handleDelete,
@@ -23,6 +23,7 @@
 // }) => {
 //   const [profiles, setProfiles] = useState([]);
 //   const [existingRatings, setExistingRatings] = useState({});
+//   const [citationUsers, setCitationUsers] = useState({});
 //   const state = useSelector((prev) => prev.auth.user);
 //   const dispatch = useDispatch();
 
@@ -144,6 +145,27 @@
 //     }
 //   };
 
+//   const fetchCitationUsers = async (paperId) => {
+//     try {
+//       const response = await axios.get(
+//         `http://localhost:8000/api/citedby/${paperId}`
+//       );
+//       console.log("citationsssssssssssss by", response.data);
+//       setCitationUsers((prev) => ({
+//         ...prev,
+//         [paperId]: response.data.citedby,
+//       }));
+//     } catch (error) {
+//       console.error("Error fetching citation users:", error);
+//     }
+//   };
+
+//   const handleMouseEnter = (paperId) => {
+//     if (!citationUsers[paperId]) {
+//       fetchCitationUsers(paperId);
+//     }
+//   };
+
 //   const filteredPapers = excludeCurrentUser
 //     ? papers.filter((paper) => paper.uploadedBy !== state.username)
 //     : papers;
@@ -197,7 +219,17 @@
 //                     )}
 //                   </h5>
 //                 )}
-//                 <h5 className={styles.h5}>Citations {data.citations}</h5>
+//                 <h5
+//                   className={styles.h5}
+//                   onMouseEnter={() => handleMouseEnter(data._id)}
+//                 >
+//                   Citations {data.citations}
+//                   <div className={styles.citedbynames}>
+//                     {citationUsers[data._id]
+//                       ? citationUsers[data._id].join(", ")
+//                       : "Loading..."}
+//                   </div>
+//                 </h5>
 //                 <h5 className={styles.h5}>Reads {data.count}</h5>
 //               </div>
 
@@ -300,7 +332,6 @@ const PaperList = ({
   papers,
   bookmarks,
   toggleBookmark,
-  searchQuery,
   showPdf,
   handleCitePopup,
   handleDelete,
@@ -568,11 +599,13 @@ const PaperList = ({
                   )}
                 </div>
               </div>
-              <div className={styles.rateauthor}>
-                <NavLink to={`/user/${encodeURIComponent(data.uploadedBy)}`}>
-                  Rate this author?
-                </NavLink>
-              </div>
+              {data.uploadedBy !== state.username && (
+                <div className={styles.rateauthor}>
+                  <NavLink to={`/user/${encodeURIComponent(data.uploadedBy)}`}>
+                    Rate this author?
+                  </NavLink>
+                </div>
+              )}
               {showButtons && (
                 <div className={styles.listButtons}>
                   {data.draft ? (
