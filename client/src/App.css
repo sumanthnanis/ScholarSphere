@@ -32,6 +32,8 @@
 
 .navivv {
   position: sticky;
+  z-index: 3;
+  top: 0;
 }
 
 @keyframes App-logo-spin {

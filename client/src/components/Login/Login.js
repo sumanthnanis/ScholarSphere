@@ -104,7 +104,7 @@ const Login = ({ onRender, setLoginState }) => {
               <i className="fas fa-user"></i>
               <input
                 type="text"
-                placeholder="email"
+                placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />

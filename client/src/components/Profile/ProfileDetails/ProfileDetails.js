@@ -82,14 +82,26 @@
 //   };
 
 //   const handleClick = (rating) => {
-//     setClickedRating(rating);
-//     setInitialRating(rating);
-//     handleAuthorRatingChange(rating);
-//     localStorage.setItem("clickedRating", rating);
-//     localStorage.setItem("initialRating", rating);
+//     if (authorname !== data.username) {
+//       // Prevent rating self
+//       setClickedRating(rating);
+//       setInitialRating(rating);
+//       handleAuthorRatingChange(rating);
+//       localStorage.setItem("clickedRating", rating);
+//       localStorage.setItem("initialRating", rating);
+//     }
 //   };
 
 //   const renderStars = (ratingToDisplay, isAverage = false) => {
+//     if (authorname === data.username) {
+//       // Only display average rating for self
+//       return (
+//         <span className={styles.averageRating}>
+//           ({authorRatings.averageRating.toFixed(1)})
+//         </span>
+//       );
+//     }
+
 //     return [1, 2, 3, 4, 5].map((star) => (
 //       <FaStar
 //         key={star}
@@ -166,6 +178,8 @@
 //     return <div>No details Found About Author</div>;
 //   }
 
+//   const isCurrentUserProfile = authorname === data.username;
+
 //   return (
 //     <div className={styles.profileDetails}>
 //       <div className={styles.profileImage}>
@@ -178,13 +192,13 @@
 //       <div className={styles.media}>
 //         <div className={styles.profileMatter}>
 //           <span className={styles.profilename}>{profileData.username}</span>
-//           <div className={styles.authorRating}>
-//             <h4>Rating:</h4>
-//             <div className={styles.stars}>
-//               {renderStars(clickedRating)}
-//               <span>({authorRatings.averageRating.toFixed(1)})</span>
+//           {!isCurrentUserProfile && (
+//             <div className={styles.authorRating}>
+//               <h4>Rating:</h4>
+//               <div className={styles.stars}>{renderStars(clickedRating)}</div>
 //             </div>
-//           </div>
+//           )}
+
 //           <div className={styles.profileColleg}>
 //             <ul>
 //               <li className={styles.profileCollege}>
@@ -205,7 +219,6 @@
 //             <div> Reads: {paperStats.totalReads}</div>
 //           </div>
 //         )}
-
 //       </div>
 //     </div>
 //   );
@@ -230,6 +243,7 @@ const ProfileDetails = ({ authorname }) => {
     averageRating: 0,
     userRating: 0,
   });
+  const [isOwnProfile, setIsOwnProfile] = useState(false);
   const dispatch = useDispatch();
   const data = useSelector((state) => state.auth.user);
 
@@ -297,7 +311,6 @@ const ProfileDetails = ({ authorname }) => {
 
   const handleClick = (rating) => {
     if (authorname !== data.username) {
-      // Prevent rating self
       setClickedRating(rating);
       setInitialRating(rating);
       handleAuthorRatingChange(rating);
@@ -338,7 +351,6 @@ const ProfileDetails = ({ authorname }) => {
   useEffect(() => {
     const fetchUsername = authorname || data.username;
     const fetchPapersByAuthor = async () => {
-      const fetchUsername = authorname || data.username;
       try {
         if (data?.username) {
           const response = await axios.get(
@@ -385,14 +397,13 @@ const ProfileDetails = ({ authorname }) => {
       fetchProfileData();
       fetchPapersByAuthor();
       fetchAuthorRatings(fetchUsername);
+      setIsOwnProfile(fetchUsername === data.username);
     }
   }, []);
 
   if (!profileData) {
     return <div>No details Found About Author</div>;
   }
-
-  const isCurrentUserProfile = authorname === data.username;
 
   return (
     <div className={styles.profileDetails}>
@@ -406,10 +417,13 @@ const ProfileDetails = ({ authorname }) => {
       <div className={styles.media}>
         <div className={styles.profileMatter}>
           <span className={styles.profilename}>{profileData.username}</span>
-          <div className={styles.authorRating}>
-            <h4>Rating:</h4>
-            <div className={styles.stars}>{renderStars(clickedRating)}</div>
-          </div>
+          {!isOwnProfile && (
+            <div className={styles.authorRating}>
+              <h4>Rating:</h4>
+              <div className={styles.stars}>{renderStars(clickedRating)}</div>
+            </div>
+          )}
+
           <div className={styles.profileColleg}>
             <ul>
               <li className={styles.profileCollege}>
