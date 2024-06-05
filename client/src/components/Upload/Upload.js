@@ -101,7 +101,7 @@ const Upload = ({ enterPage }) => {
         // setTimeout(() => {
         //   exitPage();
         //   navigate("/home");
-        // }, 500); 
+        // }, 500);
       }
     } catch (error) {
       console.error("Error submitting file:", error);
@@ -112,7 +112,7 @@ const Upload = ({ enterPage }) => {
   const exitPage = () => {
     // exitPage();
     navigate("/home");
-  }
+  };
 
   return (
     <>
@@ -262,7 +262,11 @@ const Upload = ({ enterPage }) => {
             </button>
           </div>
           <div className="middle">
-            <a onClick={exitPage} className="exitPage"> <FaHome/>{" "}Back to home</a>
+            <a onClick={exitPage} className="exitPage">
+              {" "}
+              <FaHome />
+              Back to home
+            </a>
           </div>
         </div>
       </div>
