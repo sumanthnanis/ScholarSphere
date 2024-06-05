@@ -60,7 +60,7 @@ const CategoryPage = () => {
 
   return (
     <div>
-      <div className={styles.heading}>Papers in "{category}" category</div>
+      <div className={styles.heading}>Papers on "{category}" </div>
       <PaperList
         papers={papers}
         bookmarks={papers.map((paper) =>

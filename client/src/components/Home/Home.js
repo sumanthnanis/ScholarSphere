@@ -34,7 +34,7 @@ const Home = ({ getNavigatoin }) => {
   const [activeTab, setActiveTab] = useState(
     window.innerWidth < 810 ? "papers" : "all"
   );
-
+  const [userBookmarkedPapers, setUserBookmarkedPapers] = useState([]);
   const data = useSelector((prev) => prev.auth.user);
   const [displayedPapers, setDisplayedPapers] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
@@ -236,7 +236,7 @@ const Home = ({ getNavigatoin }) => {
 
   return (
     <>
-      <Toaster richColors position="top-right" />
+      <Toaster richColors position="top-right" duration={2000} />
       <div className={styles["home-root"]}>
         <div className={styles.filterDropdown}>
           <ToggleDropdown onFilterChange={handleFilterChange} />

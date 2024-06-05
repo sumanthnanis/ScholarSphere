@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import styles from "./UserFiles.module.css";
 
@@ -12,7 +12,7 @@ const UserFiles = () => {
   const data = useSelector((prev) => prev.auth.user);
   const { bookmarkedPapers, setBookmarkedPapers } =
     useContext(BookmarksContext);
-
+  const [userBookmarkedPapers, setUserBookmarkedPapers] = useState([]);
   const showPdf = async (fileName) => {
     const url = `http://localhost:8000/files/${fileName}`;
 
@@ -30,19 +30,18 @@ const UserFiles = () => {
 
   const fetchPapers = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:8000/api/papers/${data.username}`
-      );
-      setBookmarkedPapers(
+      const response = await axios.get(`http://localhost:8000/api/get-papers`);
+
+      setUserBookmarkedPapers(
         response.data.filter((paper) =>
           paper.bookmarkedBy.includes(data.username)
         )
       );
+      console.log("bokkaosoa", userBookmarkedPapers);
     } catch (error) {
       console.error("Error fetching papers:", error);
     }
   };
-
   const handleBookmarkRemoval = async (index, id) => {
     try {
       const response = await axios.post(
@@ -55,7 +54,7 @@ const UserFiles = () => {
       );
 
       if (response.status === 200) {
-        setBookmarkedPapers((prevBookmarks) =>
+        setUserBookmarkedPapers((prevBookmarks) =>
           prevBookmarks.filter((paper) => paper._id !== id)
         );
         toast.info("Bookmark removed successfully!");
@@ -75,15 +74,15 @@ const UserFiles = () => {
 
   return (
     <div className={styles.userFiles}>
-      <h2 className={styles.filesHeading}>Files for {data.username}</h2>
+      <h2 className={styles.filesHeading}>Bookmarked by you </h2>
       <div className={styles.listBody}>
         <ul className={styles.list}>
-          {bookmarkedPapers.length === 0 ? (
+          {userBookmarkedPapers.length === 0 ? (
             <p>No Bookmarked files found</p>
           ) : (
             <PaperList
-              papers={bookmarkedPapers}
-              bookmarks={bookmarkedPapers.map(() => true)}
+              papers={userBookmarkedPapers}
+              bookmarks={userBookmarkedPapers.map(() => true)}
               toggleBookmark={handleBookmarkRemoval}
               showPdf={showPdf}
               handleCitePopup={() => {}}

@@ -7,8 +7,6 @@
   flex-direction: row;
 
   justify-content: space-between;
-
-  /* gap: 5px; */
 }
 .paperdetails {
   background-color: white;
@@ -23,6 +21,7 @@
   display: flex;
   flex-direction: column;
   flex: 1.6;
+  margin-left: 15px;
 }
 
 .relatedPapers {
@@ -90,6 +89,9 @@
   background-color: #fff;
   transition: background-color 0.3s ease;
   margin-right: 5px;
+}
+.btnPrimary {
+  margin-right: 15vw;
 }
 
 .citebutton:hover,
@@ -206,11 +208,16 @@ h5 {
 
 .h3 {
   font-size: 24px;
+  margin-left: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.h10 {
+  font-size: 24px;
   margin-left: 20px;
   margin-top: 10px;
   margin-bottom: 10px;
 }
-
 .pdf {
   font-size: 18px;
   margin-right: 5px;

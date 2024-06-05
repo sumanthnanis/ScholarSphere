@@ -1,19 +1,20 @@
 import axios from "axios";
 import { toast } from "sonner";
-
 export const toggleBookmark = async (
   index,
   paperId,
   papers,
-  bookmarkedPapers,
+  userBookmarkedPapers,
   setPapers,
-  setBookmarkedPapers,
-  username
+  setUserBookmarkedPapers,
+  username,
+  bookmarkedPapers,
+  setBookmarkedPapers
 ) => {
   try {
     const paperArray = Array.isArray(papers) ? papers : [papers];
     const paper = paperArray[index];
-    const bookmarked = !bookmarkedPapers.some((bp) => bp._id === paper._id);
+    const bookmarked = !userBookmarkedPapers.some((bp) => bp._id === paper._id);
 
     const response = await axios.post(
       `http://localhost:8000/api/toggle-bookmark`,
@@ -27,20 +28,23 @@ export const toggleBookmark = async (
     if (response.status === 200) {
       const updatedPaper = response.data.paper;
 
-      const updatedPapers = Array.isArray(papers)
-        ? papers.map((p) => (p._id === updatedPaper._id ? updatedPaper : p))
-        : updatedPaper;
-
+      const updatedPapers = papers.map((p) =>
+        p._id === updatedPaper._id ? updatedPaper : p
+      );
       setPapers(updatedPapers);
 
       if (bookmarked) {
-        setBookmarkedPapers((prev) => [...prev, updatedPaper]);
-        toast.success("Bookmarked successfully!");
+        setUserBookmarkedPapers((prev) => [...prev, updatedPaper]);
+        setBookmarkedPapers((prev) => [...prev, updatedPaper]); // Update bookmarkedPapers context
+        toast.success("Bookmarked successfully!", { duration: 2000 });
       } else {
-        setBookmarkedPapers((prev) =>
+        setUserBookmarkedPapers((prev) =>
           prev.filter((p) => p._id !== updatedPaper._id)
         );
-        toast.info("Bookmark removed successfully!");
+        setBookmarkedPapers((prev) =>
+          prev.filter((p) => p._id !== updatedPaper._id)
+        ); // Update bookmarkedPapers context
+        toast.info("Bookmark removed successfully!", { duration: 2000 });
       }
     } else {
       console.error("Failed to update bookmark status");
@@ -101,40 +105,6 @@ export const fetchProfiles = async () => {
   }
 };
 
-// export const handleCiteThisPaper = async (
-//   selectedPaper,
-//   setPapers,
-
-//   papers
-// ) => {
-//   if (!selectedPaper) return;
-
-//   try {
-//     await axios.post(
-//       `http://localhost:8000/api/increase-citations/${selectedPaper._id}`
-//     );
-
-//     if (Array.isArray(papers)) {
-//       setPapers((prevPapers) =>
-//         prevPapers.map((paper) =>
-//           paper._id === selectedPaper._id
-//             ? { ...paper, citations: paper.citations + 1 }
-//             : paper
-//         )
-//       );
-//     } else {
-//       setPapers((prevPaper) => ({
-//         ...prevPaper,
-//         citations: prevPaper.citations + 1,
-//       }));
-//     }
-//     const citationText = `Title: ${selectedPaper.title}, Author: ${selectedPaper.uploadedBy}`;
-//     await navigator.clipboard.writeText(citationText);
-//     console.log("Citation copied to clipboard:", citationText);
-//   } catch (error) {
-//     console.error("Error citing paper:", error);
-//   }
-// };
 export const handleCiteThisPaper = async (selectedPaper, setPapers, papers) => {
   if (!selectedPaper) return;
 

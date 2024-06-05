@@ -1,5 +1,5 @@
-import React from "react";
-import "./Dropdown.css";
+import React, { useState } from "react";
+import "./Dropdown.css"; // Make sure to update this file with appropriate styles
 
 function Dropdown({ items, handleCategoryClick }) {
   const renderMenu = (items) => {
@@ -17,7 +17,6 @@ function Dropdown({ items, handleCategoryClick }) {
       </ul>
     );
   };
-
   return renderMenu(items);
 }
 

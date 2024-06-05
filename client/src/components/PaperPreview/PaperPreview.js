@@ -33,7 +33,7 @@ const PaperPreview = () => {
   const [individualCopySuccess, setIndividualCopySuccess] = useState({});
   const [bookmarked, setBookmarked] = useState(false);
 
-  const username = data?.username || "defaultUsername"; // Fallback username
+  const username = data?.username || "defaultUsername";
   const [selectedPaper, setSelectedPaper] = useState(null);
 
   useEffect(() => {
@@ -207,7 +207,7 @@ const PaperPreview = () => {
 
       <div className={styles.paperpreviewcontainer}>
         <div className={styles.paperHeading}>
-          <h3 className={styles.h3}>Related Papers</h3>
+          <h3 className={styles.h3}> Overview of the paper</h3>
           <div className={styles.paperdetails}>
             <div className={styles.uppercon}>
               <div className={styles.citationscontainer}>
@@ -265,21 +265,23 @@ const PaperPreview = () => {
                   <span> PDF </span>
                 </i>
               </button>
-              <div className={styles.rating}>
+              <span>
+                {" "}
+                Rate the Paper:
                 {renderStars(previewedPaper._id, previewedPaper.uploadedBy)}
-                <span className={styles.averageRating}>
-                  (
-                  {(
-                    existingRatings[previewedPaper._id]?.averageRating ?? 0
-                  ).toFixed(1)}
-                  )
-                </span>
-              </div>
+              </span>
+              <span className={styles.averageRating}>
+                (
+                {(
+                  existingRatings[previewedPaper._id]?.averageRating ?? 0
+                ).toFixed(1)}
+                )
+              </span>
             </div>
           </div>
         </div>
         <div className={styles.relatedPapers}>
-          <h3 className={styles.h3}>Related Papers</h3>
+          <h3 className={styles.h10}>Related Papers</h3>
 
           <PaperList
             papers={relatedPapers}
